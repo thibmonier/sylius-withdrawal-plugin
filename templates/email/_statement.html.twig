@@ -1,0 +1,38 @@
+{# The e-mail layout disables autoescaping: every consumer-provided value must be escaped explicitly. #}
+<table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+    <tr>
+        <td style="padding: 6px 0; color: #666; width: 40%;">{{ 'tmonier_withdrawal.ui.reference'|trans({}, null, localeCode) }}</td>
+        <td style="padding: 6px 0;"><strong>{{ withdrawalRequest.reference|e }}</strong></td>
+    </tr>
+    <tr>
+        <td style="padding: 6px 0; color: #666;">{{ 'tmonier_withdrawal.ui.submitted_at'|trans({}, null, localeCode) }}</td>
+        <td style="padding: 6px 0;"><strong>{{ withdrawalRequest.submittedAt|format_datetime('full', 'long', locale: localeCode)|e }}</strong></td>
+    </tr>
+    <tr>
+        <td style="padding: 6px 0; color: #666;">{{ 'tmonier_withdrawal.form.customer_name'|trans({}, null, localeCode) }}</td>
+        <td style="padding: 6px 0;">{{ withdrawalRequest.customerName|e }}</td>
+    </tr>
+    <tr>
+        <td style="padding: 6px 0; color: #666;">{{ 'tmonier_withdrawal.form.email'|trans({}, null, localeCode) }}</td>
+        <td style="padding: 6px 0;">{{ withdrawalRequest.email|e }}</td>
+    </tr>
+    <tr>
+        <td style="padding: 6px 0; color: #666;">{{ 'tmonier_withdrawal.form.order_number'|trans({}, null, localeCode) }}</td>
+        <td style="padding: 6px 0;">{{ withdrawalRequest.orderNumber|e }}</td>
+    </tr>
+    <tr>
+        <td style="padding: 6px 0; color: #666; vertical-align: top;">{{ 'tmonier_withdrawal.ui.scope'|trans({}, null, localeCode) }}</td>
+        <td style="padding: 6px 0;">
+            {% if withdrawalRequest.wholeContract %}
+                {{ 'tmonier_withdrawal.ui.whole_contract'|trans({}, null, localeCode) }}
+            {% else %}
+                {% for item in withdrawalRequest.items %}
+                    {{ item.label|e }} &times; {{ item.quantity }}<br>
+                {% endfor %}
+                {% if withdrawalRequest.itemsDescription is not empty %}
+                    {{ withdrawalRequest.itemsDescription|e|nl2br }}
+                {% endif %}
+            {% endif %}
+        </td>
+    </tr>
+</table>

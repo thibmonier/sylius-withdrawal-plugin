@@ -1,0 +1,21 @@
+sylius_twig_hooks:
+    hooks:
+        'tmonier_withdrawal.admin.withdrawal_request.show.content':
+            sections:
+                template: '@TmonierSyliusWithdrawalPlugin/admin/withdrawal_request/show/sections.html.twig'
+                priority: 0
+
+        'tmonier_withdrawal.admin.withdrawal_request.show.content.header.title_block':
+            actions:
+                template: '@TmonierSyliusWithdrawalPlugin/admin/withdrawal_request/show/header/actions.html.twig'
+                priority: -100
+
+        'tmonier_withdrawal.admin.withdrawal_request.show.content.sections#left':
+            general:
+                template: '@TmonierSyliusWithdrawalPlugin/admin/withdrawal_request/show/sections/general.html.twig'
+                priority: 0
+
+        'tmonier_withdrawal.admin.withdrawal_request.show.content.sections#right':
+            order:
+                template: '@TmonierSyliusWithdrawalPlugin/admin/withdrawal_request/show/sections/order.html.twig'
+                priority: 0

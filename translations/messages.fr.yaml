@@ -1,0 +1,57 @@
+tmonier_withdrawal:
+    ui:
+        withdraw_from_contract_here: renoncer au contrat ici
+        confirm_withdrawal: confirmer la rétractation
+        form_intro: Utilisez ce formulaire pour vous rétracter d'un contrat conclu sur ce site. Aucune connexion n'est nécessaire et vous n'avez pas à justifier votre décision.
+        continue: Continuer
+        edit: Modifier ma déclaration
+        review_your_statement: Vérifiez votre déclaration de rétractation
+        review_intro: Votre rétractation ne sera transmise qu'après confirmation ci-dessous.
+        statement_text: Je vous notifie par la présente ma rétractation du contrat portant sur la vente du bien / la prestation de services ci-dessous.
+        scope: Biens ou services concernés
+        whole_contract: L'ensemble du contrat
+        withdrawal_received: Votre rétractation a bien été reçue
+        received_on: Nous avons reçu votre déclaration de rétractation le %date% (référence %reference%).
+        acknowledgement_sent: Un accusé de réception a été envoyé à %email%.
+        reference: Référence
+        submitted_at: Envoyée le
+        acknowledged_at: Accusé de réception envoyé le
+        not_sent: Non envoyé
+        processed_at: Traitée le
+        deadline_at: Fin du délai de rétractation
+        timeliness: Délai
+        timeliness_unknown: Inconnu
+        timeliness_unknown_help: Aucune commande correspondante, le délai ne peut pas être calculé.
+        in_time: Dans le délai
+        late: Hors délai
+        order_not_matched: Aucune commande de ce canal ne correspond à ce numéro et à cette adresse e-mail. Vérifiez la demande manuellement.
+        statement: Déclaration
+        accept: Accepter
+        reject: Refuser
+        withdrawal_request: Rétractation
+        withdrawal_requests: Rétractations
+        customer_name: Client
+        state:
+            received: Reçue
+            accepted: Acceptée
+            rejected: Refusée
+    form:
+        customer_name: Nom complet
+        email: Adresse e-mail
+        email_help: L'accusé de réception sera envoyé à cette adresse.
+        order_number: Numéro de commande
+        order_number_help: Il figure dans l'e-mail de confirmation de votre commande.
+        order_items: Articles concernés
+        order_items_help: Ne cochez rien pour vous rétracter de toute la commande.
+        items_description: Biens ou services concernés (facultatif)
+        items_description_help: Laissez vide pour vous rétracter de l'ensemble du contrat.
+    email:
+        hello: Bonjour %name%,
+        acknowledgement:
+            subject: Accusé de réception de votre rétractation (%reference%)
+            title: Rétractation reçue
+            body: Nous confirmons que %channel% a bien reçu votre déclaration de rétractation. Son contenu, sa date et son heure d'envoi sont reproduits ci-dessous.
+            keep: Conservez cet e-mail comme preuve de votre rétractation.
+        merchant_notification:
+            subject: Nouvelle rétractation %reference% pour la commande %order%
+            body: Un client a envoyé une déclaration de rétractation via la fonction de rétractation de votre boutique.

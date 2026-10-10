@@ -1,0 +1,19 @@
+{% extends '@SyliusCore/Email/layout.html.twig' %}
+
+{% block subject %}
+    {{ 'tmonier_withdrawal.email.acknowledgement.subject'|trans({'%reference%': withdrawalRequest.reference}, null, localeCode) }}
+{% endblock %}
+
+{% block content %}
+    <div style="text-align: center; margin-bottom: 20px;">
+        <h2 style="margin: 0;">{{ 'tmonier_withdrawal.email.acknowledgement.title'|trans({}, null, localeCode) }}</h2>
+    </div>
+
+    <p>{{ 'tmonier_withdrawal.email.hello'|trans({'%name%': withdrawalRequest.customerName|e}, null, localeCode) }}</p>
+    <p>{{ 'tmonier_withdrawal.email.acknowledgement.body'|trans({'%channel%': channel.name|e}, null, localeCode) }}</p>
+    <p><em>{{ 'tmonier_withdrawal.ui.statement_text'|trans({}, null, localeCode) }}</em></p>
+
+    {% include '@TmonierSyliusWithdrawalPlugin/email/_statement.html.twig' %}
+
+    <p style="color: #666; font-size: 14px;">{{ 'tmonier_withdrawal.email.acknowledgement.keep'|trans({}, null, localeCode) }}</p>
+{% endblock %}

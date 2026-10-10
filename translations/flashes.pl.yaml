@@ -1,0 +1,4 @@
+tmonier_withdrawal:
+    withdrawal_request:
+        accept: Odstąpienie od umowy zostało zaakceptowane.
+        reject: Odstąpienie od umowy zostało odrzucone.

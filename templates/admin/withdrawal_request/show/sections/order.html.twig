@@ -1,0 +1,39 @@
+{% set r = hookable_metadata.context.resource %}
+
+<div class="card mb-3">
+    <div class="card-header"><div class="card-title">{{ 'sylius.ui.order'|trans }}</div></div>
+    <div class="card-body">
+        <div class="datagrid">
+            <div class="datagrid-item">
+                <div class="datagrid-title">{{ 'tmonier_withdrawal.form.order_number'|trans }}</div>
+                <div class="datagrid-content">{% include '@TmonierSyliusWithdrawalPlugin/admin/withdrawal_request/grid/field/order.html.twig' with { data: r } %}</div>
+            </div>
+            <div class="datagrid-item">
+                <div class="datagrid-title">{{ 'tmonier_withdrawal.ui.deadline_at'|trans }}</div>
+                <div class="datagrid-content">{% if r.deadlineAt %}{{ r.deadlineAt|format_date('medium') }}{% else %}-{% endif %}</div>
+            </div>
+            <div class="datagrid-item">
+                <div class="datagrid-title">{{ 'tmonier_withdrawal.ui.timeliness'|trans }}</div>
+                <div class="datagrid-content" {{ sylius_test_html_attribute('timeliness') }}>{% include '@TmonierSyliusWithdrawalPlugin/admin/withdrawal_request/common/timeliness.html.twig' with { withdrawal_request: r } %}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header"><div class="card-title">{{ 'tmonier_withdrawal.ui.scope'|trans }}</div></div>
+    <div class="card-body" {{ sylius_test_html_attribute('scope') }}>
+        {% if r.wholeContract %}
+            {{ 'tmonier_withdrawal.ui.whole_contract'|trans }}
+        {% else %}
+            {% if r.hasItems %}
+                <ul>
+                    {% for item in r.items %}<li>{{ item.label }} × {{ item.quantity }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+            {% if r.itemsDescription is not empty %}
+                <div class="text-break">{{ r.itemsDescription|nl2br }}</div>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>

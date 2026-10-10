@@ -1,0 +1,57 @@
+tmonier_withdrawal:
+    ui:
+        withdraw_from_contract_here: withdraw from contract here
+        confirm_withdrawal: confirm withdrawal
+        form_intro: Use this form to withdraw from a contract concluded on this website. No login is required and you do not need to give any reason.
+        continue: Continue
+        edit: Edit my statement
+        review_your_statement: Review your withdrawal statement
+        review_intro: Your withdrawal is only sent once you confirm it below.
+        statement_text: I hereby give notice that I withdraw from my contract of sale of the following goods / for the provision of the following service.
+        scope: Concerned goods or services
+        whole_contract: The whole contract
+        withdrawal_received: Your withdrawal has been received
+        received_on: We received your withdrawal statement on %date% (reference %reference%).
+        acknowledgement_sent: An acknowledgement of receipt has been sent to %email%.
+        reference: Reference
+        submitted_at: Submitted at
+        acknowledged_at: Acknowledgement sent at
+        not_sent: Not sent
+        processed_at: Processed at
+        deadline_at: End of withdrawal period
+        timeliness: Timeliness
+        timeliness_unknown: Unknown
+        timeliness_unknown_help: No matching order was found, the deadline cannot be computed.
+        in_time: In time
+        late: Late
+        order_not_matched: No order of this channel matches this number and e-mail address. Please check the request manually.
+        statement: Statement
+        accept: Accept
+        reject: Reject
+        withdrawal_request: Withdrawal
+        withdrawal_requests: Withdrawals
+        customer_name: Customer
+        state:
+            received: Received
+            accepted: Accepted
+            rejected: Rejected
+    form:
+        customer_name: Full name
+        email: E-mail address
+        email_help: The acknowledgement of receipt will be sent to this address.
+        order_number: Order number
+        order_number_help: You can find it in your order confirmation e-mail.
+        order_items: Concerned items
+        order_items_help: Leave everything unchecked to withdraw from the whole order.
+        items_description: Concerned goods or services (optional)
+        items_description_help: Leave empty to withdraw from the whole contract.
+    email:
+        hello: Hello %name%,
+        acknowledgement:
+            subject: Acknowledgement of receipt of your withdrawal (%reference%)
+            title: Withdrawal received
+            body: We confirm that %channel% has received your withdrawal statement. Its content, date and time of submission are reproduced below.
+            keep: Please keep this e-mail as proof of your withdrawal.
+        merchant_notification:
+            subject: New withdrawal %reference% for order %order%
+            body: A customer has submitted a withdrawal statement through the withdrawal function of your store.

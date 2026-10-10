@@ -1,0 +1,31 @@
+{% set statement = hookable_metadata.context.statement %}
+{% set selected_items = hookable_metadata.context.selected_items %}
+
+<div class="card mb-4">
+    <div class="card-body">
+        <p class="mb-3">{{ 'tmonier_withdrawal.ui.statement_text'|trans }}</p>
+        <dl class="row mb-0">
+            <dt class="col-sm-5">{{ 'tmonier_withdrawal.form.customer_name'|trans }}</dt>
+            <dd class="col-sm-7" {{ sylius_test_html_attribute('withdrawal-summary-name') }}>{{ statement.customerName }}</dd>
+            <dt class="col-sm-5">{{ 'tmonier_withdrawal.form.email'|trans }}</dt>
+            <dd class="col-sm-7">{{ statement.email }}</dd>
+            <dt class="col-sm-5">{{ 'tmonier_withdrawal.form.order_number'|trans }}</dt>
+            <dd class="col-sm-7" {{ sylius_test_html_attribute('withdrawal-summary-order') }}>{{ statement.orderNumber }}</dd>
+            <dt class="col-sm-5">{{ 'tmonier_withdrawal.ui.scope'|trans }}</dt>
+            <dd class="col-sm-7">
+                {% if selected_items is not empty or statement.itemsDescription is not empty %}
+                    {% if selected_items is not empty %}
+                        <ul class="mb-1 ps-3">
+                            {% for label in selected_items %}<li>{{ label }}</li>{% endfor %}
+                        </ul>
+                    {% endif %}
+                    {% if statement.itemsDescription is not empty %}
+                        <div class="text-break">{{ statement.itemsDescription|nl2br }}</div>
+                    {% endif %}
+                {% else %}
+                    {{ 'tmonier_withdrawal.ui.whole_contract'|trans }}
+                {% endif %}
+            </dd>
+        </dl>
+    </div>
+</div>

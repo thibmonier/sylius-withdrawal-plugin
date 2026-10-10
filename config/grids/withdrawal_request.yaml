@@ -1,0 +1,74 @@
+sylius_grid:
+    grids:
+        tmonier_withdrawal_admin_withdrawal_request:
+            driver:
+                name: doctrine/orm
+                options:
+                    class: "%tmonier_withdrawal.model.withdrawal_request.class%"
+            sorting:
+                submittedAt: desc
+            fields:
+                reference:
+                    type: string
+                    label: tmonier_withdrawal.ui.reference
+                submittedAt:
+                    type: twig
+                    label: tmonier_withdrawal.ui.submitted_at
+                    sortable: ~
+                    options:
+                        template: "@SyliusAdmin/shared/grid/field/date.html.twig"
+                customerName:
+                    type: string
+                    label: tmonier_withdrawal.ui.customer_name
+                    sortable: ~
+                email:
+                    type: string
+                    label: sylius.ui.email
+                order:
+                    type: twig
+                    label: sylius.ui.order
+                    path: .
+                    options:
+                        template: "@TmonierSyliusWithdrawalPlugin/admin/withdrawal_request/grid/field/order.html.twig"
+                timeliness:
+                    type: twig
+                    label: tmonier_withdrawal.ui.timeliness
+                    path: .
+                    options:
+                        template: "@TmonierSyliusWithdrawalPlugin/admin/withdrawal_request/grid/field/timeliness.html.twig"
+                state:
+                    type: twig
+                    label: sylius.ui.state
+                    options:
+                        template: "@TmonierSyliusWithdrawalPlugin/admin/withdrawal_request/grid/field/state.html.twig"
+            filters:
+                search:
+                    type: string
+                    label: sylius.ui.search
+                    options:
+                        fields: [reference, customerName, email, orderNumber]
+                state:
+                    type: select
+                    label: sylius.ui.state
+                    form_options:
+                        choices:
+                            tmonier_withdrawal.ui.state.received: !php/const Tmonier\SyliusWithdrawalPlugin\Entity\WithdrawalRequestInterface::STATE_RECEIVED
+                            tmonier_withdrawal.ui.state.accepted: !php/const Tmonier\SyliusWithdrawalPlugin\Entity\WithdrawalRequestInterface::STATE_ACCEPTED
+                            tmonier_withdrawal.ui.state.rejected: !php/const Tmonier\SyliusWithdrawalPlugin\Entity\WithdrawalRequestInterface::STATE_REJECTED
+                channel:
+                    type: entity
+                    label: sylius.ui.channel
+                    form_options:
+                        class: "%sylius.model.channel.class%"
+                submittedAt:
+                    type: date
+                    label: tmonier_withdrawal.ui.submitted_at
+            actions:
+                item:
+                    show:
+                        type: show
+                        options:
+                            link:
+                                route: tmonier_withdrawal_admin_withdrawal_request_show
+                                parameters:
+                                    id: resource.id

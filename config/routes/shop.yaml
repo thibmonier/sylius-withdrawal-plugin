@@ -1,0 +1,17 @@
+tmonier_withdrawal_shop_form:
+    path: /withdrawal
+    methods: [GET, POST]
+    defaults:
+        _controller: tmonier_withdrawal.controller.shop.withdrawal::formAction
+
+tmonier_withdrawal_shop_confirm:
+    path: /withdrawal/confirm
+    methods: [GET, POST]
+    defaults:
+        _controller: tmonier_withdrawal.controller.shop.withdrawal::confirmAction
+
+tmonier_withdrawal_shop_done:
+    path: /withdrawal/done
+    methods: [GET]
+    defaults:
+        _controller: tmonier_withdrawal.controller.shop.withdrawal::doneAction

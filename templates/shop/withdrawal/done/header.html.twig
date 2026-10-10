@@ -1,0 +1,12 @@
+{% set withdrawal_request = hookable_metadata.context.withdrawal_request %}
+
+<div class="mb-4">
+    <h1 class="h2" {{ sylius_test_html_attribute('withdrawal-received') }}>{{ 'tmonier_withdrawal.ui.withdrawal_received'|trans }}</h1>
+    <p>
+        {{ 'tmonier_withdrawal.ui.received_on'|trans({
+            '%date%': withdrawal_request.submittedAt|format_datetime('long', 'medium', locale: app.request.locale),
+            '%reference%': withdrawal_request.reference,
+        }) }}
+    </p>
+    <p class="text-body-secondary">{{ 'tmonier_withdrawal.ui.acknowledgement_sent'|trans({'%email%': withdrawal_request.email}) }}</p>
+</div>

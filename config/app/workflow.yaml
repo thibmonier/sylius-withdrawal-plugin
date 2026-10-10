@@ -1,0 +1,25 @@
+framework:
+    workflows:
+        tmonier_withdrawal_request:
+            type: state_machine
+            marking_store:
+                type: method
+                property: state
+            supports:
+                - Tmonier\SyliusWithdrawalPlugin\Entity\WithdrawalRequestInterface
+            initial_marking: !php/const Tmonier\SyliusWithdrawalPlugin\Entity\WithdrawalRequestInterface::STATE_RECEIVED
+            places:
+                - !php/const Tmonier\SyliusWithdrawalPlugin\Entity\WithdrawalRequestInterface::STATE_RECEIVED
+                - !php/const Tmonier\SyliusWithdrawalPlugin\Entity\WithdrawalRequestInterface::STATE_ACCEPTED
+                - !php/const Tmonier\SyliusWithdrawalPlugin\Entity\WithdrawalRequestInterface::STATE_REJECTED
+            transitions:
+                accept:
+                    from: !php/const Tmonier\SyliusWithdrawalPlugin\Entity\WithdrawalRequestInterface::STATE_RECEIVED
+                    to: !php/const Tmonier\SyliusWithdrawalPlugin\Entity\WithdrawalRequestInterface::STATE_ACCEPTED
+                reject:
+                    from: !php/const Tmonier\SyliusWithdrawalPlugin\Entity\WithdrawalRequestInterface::STATE_RECEIVED
+                    to: !php/const Tmonier\SyliusWithdrawalPlugin\Entity\WithdrawalRequestInterface::STATE_REJECTED
+
+sylius_state_machine_abstraction:
+    graphs_to_adapters_mapping:
+        tmonier_withdrawal_request: symfony_workflow

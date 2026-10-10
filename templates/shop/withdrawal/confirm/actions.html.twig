@@ -1,0 +1,12 @@
+{% import '@SyliusShop/shared/buttons.html.twig' as buttons %}
+
+{% set order = hookable_metadata.context.order %}
+
+<form action="{{ path('tmonier_withdrawal_shop_confirm', order ? {'order': order.number} : {}) }}" method="post" novalidate>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token(hookable_metadata.context.csrf_token_id) }}">
+    <div class="d-grid gap-2">
+        {# Art. 11a(3): this button must be labelled only with "confirm withdrawal" (or an unambiguous equivalent). #}
+        {{ buttons.submit('tmonier_withdrawal.ui.confirm_withdrawal'|trans, 'withdrawal-confirm', null, 'btn-primary btn-lg') }}
+        {{ buttons.default(path('tmonier_withdrawal_shop_form', order ? {'order': order.number} : {}), 'tmonier_withdrawal.ui.edit', 'withdrawal-edit', null, 'btn-link') }}
+    </div>
+</form>

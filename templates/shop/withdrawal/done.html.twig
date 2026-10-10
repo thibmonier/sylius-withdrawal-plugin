@@ -1,0 +1,7 @@
+{% extends '@SyliusShop/shared/layout/base.html.twig' %}
+
+{% block title %}{{ 'tmonier_withdrawal.ui.withdrawal_received'|trans }} | {{ parent() }}{% endblock %}
+
+{% block content %}
+    {% hook 'tmonier_withdrawal.shop.withdrawal.done' with { withdrawal_request } %}
+{% endblock %}

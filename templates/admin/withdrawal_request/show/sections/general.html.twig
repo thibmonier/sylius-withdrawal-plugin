@@ -1,0 +1,49 @@
+{% set r = hookable_metadata.context.resource %}
+
+<div class="card mb-3">
+    <div class="card-header"><div class="card-title">{{ 'tmonier_withdrawal.ui.statement'|trans }}</div></div>
+    <div class="card-body">
+        <div class="datagrid">
+            <div class="datagrid-item">
+                <div class="datagrid-title">{{ 'tmonier_withdrawal.ui.reference'|trans }}</div>
+                <div class="datagrid-content" {{ sylius_test_html_attribute('reference') }}>{{ r.reference }}</div>
+            </div>
+            <div class="datagrid-item">
+                <div class="datagrid-title">{{ 'sylius.ui.state'|trans }}</div>
+                <div class="datagrid-content" {{ sylius_test_html_attribute('state') }}>{% include '@TmonierSyliusWithdrawalPlugin/admin/withdrawal_request/common/state.html.twig' with { state: r.state } %}</div>
+            </div>
+            <div class="datagrid-item">
+                <div class="datagrid-title">{{ 'tmonier_withdrawal.ui.submitted_at'|trans }}</div>
+                <div class="datagrid-content">{{ r.submittedAt|format_datetime('medium', 'long') }}</div>
+            </div>
+            <div class="datagrid-item">
+                <div class="datagrid-title">{{ 'tmonier_withdrawal.ui.acknowledged_at'|trans }}</div>
+                <div class="datagrid-content">
+                    {% if r.acknowledgedAt %}{{ r.acknowledgedAt|format_datetime('medium', 'long') }}{% else %}<span class="badge bg-red-lt">{{ 'tmonier_withdrawal.ui.not_sent'|trans }}</span>{% endif %}
+                </div>
+            </div>
+            <div class="datagrid-item">
+                <div class="datagrid-title">{{ 'tmonier_withdrawal.form.customer_name'|trans }}</div>
+                <div class="datagrid-content">{{ r.customerName }}</div>
+            </div>
+            <div class="datagrid-item">
+                <div class="datagrid-title">{{ 'sylius.ui.email'|trans }}</div>
+                <div class="datagrid-content">{{ r.email }}</div>
+            </div>
+            <div class="datagrid-item">
+                <div class="datagrid-title">{{ 'sylius.ui.channel'|trans }}</div>
+                <div class="datagrid-content">{{ r.channel.name }}</div>
+            </div>
+            <div class="datagrid-item">
+                <div class="datagrid-title">{{ 'sylius.ui.locale'|trans }}</div>
+                <div class="datagrid-content">{{ r.localeCode }}</div>
+            </div>
+            {% if r.processedAt %}
+                <div class="datagrid-item">
+                    <div class="datagrid-title">{{ 'tmonier_withdrawal.ui.processed_at'|trans }}</div>
+                    <div class="datagrid-content">{{ r.processedAt|format_datetime('medium', 'short') }}</div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,57 @@
+tmonier_withdrawal:
+    ui:
+        withdraw_from_contract_here: odstąp od umowy tutaj
+        confirm_withdrawal: potwierdź odstąpienie od umowy
+        form_intro: Skorzystaj z tego formularza, aby odstąpić od umowy zawartej w tym sklepie. Logowanie nie jest wymagane i nie musisz podawać przyczyny.
+        continue: Dalej
+        edit: Zmień oświadczenie
+        review_your_statement: Sprawdź swoje oświadczenie o odstąpieniu od umowy
+        review_intro: Oświadczenie zostanie wysłane dopiero po potwierdzeniu poniżej.
+        statement_text: Niniejszym informuję o moim odstąpieniu od umowy sprzedaży następujących rzeczy / o świadczenie następującej usługi.
+        scope: Rzeczy lub usługi objęte odstąpieniem
+        whole_contract: Cała umowa
+        withdrawal_received: Otrzymaliśmy Twoje oświadczenie
+        received_on: Otrzymaliśmy Twoje oświadczenie o odstąpieniu od umowy %date% (numer %reference%).
+        acknowledgement_sent: Potwierdzenie otrzymania zostało wysłane na adres %email%.
+        reference: Numer
+        submitted_at: Data złożenia
+        acknowledged_at: Potwierdzenie wysłane
+        not_sent: Nie wysłano
+        processed_at: Data rozpatrzenia
+        deadline_at: Koniec terminu na odstąpienie
+        timeliness: Termin
+        timeliness_unknown: Nieznany
+        timeliness_unknown_help: Nie znaleziono pasującego zamówienia, nie można obliczyć terminu.
+        in_time: W terminie
+        late: Po terminie
+        order_not_matched: Żadne zamówienie z tego kanału nie pasuje do tego numeru i adresu e-mail. Sprawdź zgłoszenie ręcznie.
+        statement: Oświadczenie
+        accept: Akceptuj
+        reject: Odrzuć
+        withdrawal_request: Odstąpienie od umowy
+        withdrawal_requests: Odstąpienia od umowy
+        customer_name: Klient
+        state:
+            received: Otrzymane
+            accepted: Zaakceptowane
+            rejected: Odrzucone
+    form:
+        customer_name: Imię i nazwisko
+        email: Adres e-mail
+        email_help: Potwierdzenie otrzymania zostanie wysłane na ten adres.
+        order_number: Numer zamówienia
+        order_number_help: Znajdziesz go w e-mailu potwierdzającym zamówienie.
+        order_items: Produkty objęte odstąpieniem
+        order_items_help: Nie zaznaczaj niczego, aby odstąpić od całego zamówienia.
+        items_description: Rzeczy lub usługi objęte odstąpieniem (opcjonalnie)
+        items_description_help: Pozostaw puste, aby odstąpić od całej umowy.
+    email:
+        hello: Dzień dobry %name%,
+        acknowledgement:
+            subject: Potwierdzenie otrzymania oświadczenia o odstąpieniu (%reference%)
+            title: Otrzymaliśmy oświadczenie
+            body: Potwierdzamy, że %channel% otrzymał Twoje oświadczenie o odstąpieniu od umowy. Jego treść oraz data i godzina złożenia znajdują się poniżej.
+            keep: Zachowaj tę wiadomość jako dowód odstąpienia od umowy.
+        merchant_notification:
+            subject: Nowe odstąpienie %reference% od zamówienia %order%
+            body: Klient złożył oświadczenie o odstąpieniu od umowy za pomocą funkcji odstąpienia w Twoim sklepie.

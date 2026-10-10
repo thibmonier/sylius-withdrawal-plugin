@@ -1,0 +1,4 @@
+tmonier_withdrawal:
+    withdrawal_request:
+        accept: Der Widerruf wurde angenommen.
+        reject: Der Widerruf wurde abgelehnt.

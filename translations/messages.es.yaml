@@ -1,0 +1,57 @@
+tmonier_withdrawal:
+    ui:
+        withdraw_from_contract_here: desistir del contrato aquí
+        confirm_withdrawal: confirmar desistimiento
+        form_intro: Utilice este formulario para desistir de un contrato celebrado en este sitio web. No es necesario iniciar sesión ni indicar ningún motivo.
+        continue: Continuar
+        edit: Modificar mi declaración
+        review_your_statement: Revise su declaración de desistimiento
+        review_intro: Su desistimiento solo se enviará cuando lo confirme a continuación.
+        statement_text: Por la presente le comunico que desisto de mi contrato de venta de los siguientes bienes / de prestación del siguiente servicio.
+        scope: Bienes o servicios afectados
+        whole_contract: Todo el contrato
+        withdrawal_received: Hemos recibido su desistimiento
+        received_on: Recibimos su declaración de desistimiento el %date% (referencia %reference%).
+        acknowledgement_sent: Se ha enviado un acuse de recibo a %email%.
+        reference: Referencia
+        submitted_at: Enviado el
+        acknowledged_at: Acuse de recibo enviado el
+        not_sent: No enviado
+        processed_at: Tramitado el
+        deadline_at: Fin del plazo de desistimiento
+        timeliness: Plazo
+        timeliness_unknown: Desconocido
+        timeliness_unknown_help: No se ha encontrado ningún pedido, no se puede calcular el plazo.
+        in_time: En plazo
+        late: Fuera de plazo
+        order_not_matched: Ningún pedido de este canal coincide con este número y esta dirección de correo electrónico. Revise la solicitud manualmente.
+        statement: Declaración
+        accept: Aceptar
+        reject: Rechazar
+        withdrawal_request: Desistimiento
+        withdrawal_requests: Desistimientos
+        customer_name: Cliente
+        state:
+            received: Recibido
+            accepted: Aceptado
+            rejected: Rechazado
+    form:
+        customer_name: Nombre completo
+        email: Correo electrónico
+        email_help: El acuse de recibo se enviará a esta dirección.
+        order_number: Número de pedido
+        order_number_help: Figura en el correo de confirmación de su pedido.
+        order_items: Artículos afectados
+        order_items_help: No marque nada para desistir de todo el pedido.
+        items_description: Bienes o servicios afectados (opcional)
+        items_description_help: Déjelo vacío para desistir de todo el contrato.
+    email:
+        hello: Hola, %name%:
+        acknowledgement:
+            subject: Acuse de recibo de su desistimiento (%reference%)
+            title: Desistimiento recibido
+            body: Confirmamos que %channel% ha recibido su declaración de desistimiento. A continuación se reproducen su contenido y la fecha y hora de envío.
+            keep: Conserve este correo como prueba de su desistimiento.
+        merchant_notification:
+            subject: Nuevo desistimiento %reference% del pedido %order%
+            body: Un cliente ha enviado una declaración de desistimiento mediante la función de desistimiento de su tienda.

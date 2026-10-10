@@ -1,0 +1,57 @@
+tmonier_withdrawal:
+    ui:
+        withdraw_from_contract_here: Vertrag widerrufen
+        confirm_withdrawal: Widerruf bestätigen
+        form_intro: Mit diesem Formular können Sie einen auf dieser Website geschlossenen Vertrag widerrufen. Eine Anmeldung ist nicht erforderlich und Sie müssen keine Gründe angeben.
+        continue: Weiter
+        edit: Erklärung bearbeiten
+        review_your_statement: Überprüfen Sie Ihre Widerrufserklärung
+        review_intro: Ihr Widerruf wird erst übermittelt, wenn Sie ihn unten bestätigen.
+        statement_text: Hiermit widerrufe ich den von mir abgeschlossenen Vertrag über den Kauf der folgenden Waren / die Erbringung der folgenden Dienstleistung.
+        scope: Betroffene Waren oder Dienstleistungen
+        whole_contract: Der gesamte Vertrag
+        withdrawal_received: Ihr Widerruf ist eingegangen
+        received_on: Wir haben Ihre Widerrufserklärung am %date% erhalten (Referenz %reference%).
+        acknowledgement_sent: Eine Eingangsbestätigung wurde an %email% gesendet.
+        reference: Referenz
+        submitted_at: Eingereicht am
+        acknowledged_at: Eingangsbestätigung gesendet am
+        not_sent: Nicht gesendet
+        processed_at: Bearbeitet am
+        deadline_at: Ende der Widerrufsfrist
+        timeliness: Fristwahrung
+        timeliness_unknown: Unbekannt
+        timeliness_unknown_help: Keine passende Bestellung gefunden, die Frist kann nicht berechnet werden.
+        in_time: Fristgerecht
+        late: Verspätet
+        order_not_matched: Keine Bestellung dieses Kanals passt zu dieser Nummer und E-Mail-Adresse. Bitte prüfen Sie den Antrag manuell.
+        statement: Erklärung
+        accept: Annehmen
+        reject: Ablehnen
+        withdrawal_request: Widerruf
+        withdrawal_requests: Widerrufe
+        customer_name: Kunde
+        state:
+            received: Eingegangen
+            accepted: Angenommen
+            rejected: Abgelehnt
+    form:
+        customer_name: Vollständiger Name
+        email: E-Mail-Adresse
+        email_help: Die Eingangsbestätigung wird an diese Adresse gesendet.
+        order_number: Bestellnummer
+        order_number_help: Sie finden sie in Ihrer Bestellbestätigung.
+        order_items: Betroffene Artikel
+        order_items_help: Lassen Sie alles leer, um die gesamte Bestellung zu widerrufen.
+        items_description: Betroffene Waren oder Dienstleistungen (optional)
+        items_description_help: Leer lassen, um den gesamten Vertrag zu widerrufen.
+    email:
+        hello: Hallo %name%,
+        acknowledgement:
+            subject: Eingangsbestätigung Ihres Widerrufs (%reference%)
+            title: Widerruf eingegangen
+            body: Wir bestätigen, dass %channel% Ihre Widerrufserklärung erhalten hat. Inhalt, Datum und Uhrzeit der Übermittlung finden Sie unten.
+            keep: Bitte bewahren Sie diese E-Mail als Nachweis Ihres Widerrufs auf.
+        merchant_notification:
+            subject: Neuer Widerruf %reference% für Bestellung %order%
+            body: Ein Kunde hat über die Widerrufsfunktion Ihres Shops eine Widerrufserklärung abgegeben.

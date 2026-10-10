@@ -1,0 +1,8 @@
+sylius_mailer:
+    emails:
+        tmonier_withdrawal_acknowledgement:
+            subject: tmonier_withdrawal.email.acknowledgement.subject
+            template: "@TmonierSyliusWithdrawalPlugin/email/acknowledgement.html.twig"
+        tmonier_withdrawal_merchant_notification:
+            subject: tmonier_withdrawal.email.merchant_notification.subject
+            template: "@TmonierSyliusWithdrawalPlugin/email/merchant_notification.html.twig"

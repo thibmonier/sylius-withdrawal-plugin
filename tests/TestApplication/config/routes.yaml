@@ -1,0 +1,2 @@
+tmonier_sylius_withdrawal:
+    resource: "@TmonierSyliusWithdrawalPlugin/config/routes.yaml"

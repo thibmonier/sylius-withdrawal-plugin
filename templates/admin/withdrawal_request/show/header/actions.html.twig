@@ -1,0 +1,19 @@
+{% set withdrawal_request = hookable_metadata.context.resource %}
+
+<div class="col-12 col-md-auto ms-auto d-print-none">
+    <div class="btn-list">
+        {% for transition, style in {'accept': 'btn-success', 'reject': 'btn-outline-danger'} %}
+            {% if sylius_sm_can(withdrawal_request, 'tmonier_withdrawal_request', transition) %}
+                <form action="{{ path('tmonier_withdrawal_admin_withdrawal_request_' ~ transition, {'id': withdrawal_request.id}) }}" method="POST" novalidate>
+                    <input type="hidden" name="_method" value="PUT">
+                    {% if sylius_csrf_protection_enabled() %}
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token(withdrawal_request.id) }}" />
+                    {% endif %}
+                    <button type="submit" class="btn {{ style }}" {{ sylius_test_html_attribute('withdrawal-' ~ transition) }}>
+                        {{ ('tmonier_withdrawal.ui.' ~ transition)|trans }}
+                    </button>
+                </form>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>

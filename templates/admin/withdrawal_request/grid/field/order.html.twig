@@ -1,0 +1,5 @@
+{% if data.order is not null %}
+    <a href="{{ path('sylius_admin_order_show', {'id': data.order.id}) }}">#{{ data.order.number }}</a>
+{% else %}
+    <span class="text-secondary" title="{{ 'tmonier_withdrawal.ui.order_not_matched'|trans }}">{{ data.orderNumber }} ?</span>
+{% endif %}

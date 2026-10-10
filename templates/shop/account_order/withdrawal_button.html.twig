@@ -1,0 +1,7 @@
+{% import '@SyliusShop/shared/buttons.html.twig' as buttons %}
+
+{% set order = hookable_metadata.context.order %}
+
+{% if order.state in [constant('Sylius\\Component\\Core\\Model\\OrderInterface::STATE_NEW'), constant('Sylius\\Component\\Core\\Model\\OrderInterface::STATE_FULFILLED')] %}
+    {{ buttons.default(path('tmonier_withdrawal_shop_form', {'order': order.number}), 'tmonier_withdrawal.ui.withdraw_from_contract_here', 'withdrawal-order-button', 'tabler:arrow-back-up', 'btn-outline-primary') }}
+{% endif %}

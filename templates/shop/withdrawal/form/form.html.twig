@@ -1,0 +1,18 @@
+{% import '@SyliusShop/shared/buttons.html.twig' as buttons %}
+
+{% set form = hookable_metadata.context.form %}
+{% set order = hookable_metadata.context.order %}
+
+{{ form_start(form, {'action': path('tmonier_withdrawal_shop_form', order ? {'order': order.number} : {}), 'attr': {'novalidate': 'novalidate'}}) }}
+    {{ form_row(form.customerName, sylius_test_form_attribute('withdrawal-customer-name')) }}
+    {{ form_row(form.email, sylius_test_form_attribute('withdrawal-email')) }}
+    {{ form_row(form.orderNumber, sylius_test_form_attribute('withdrawal-order-number')) }}
+    {% if form.orderItemIds is defined %}
+        {{ form_row(form.orderItemIds, sylius_test_form_attribute('withdrawal-order-items')) }}
+    {% endif %}
+    {{ form_row(form.itemsDescription, sylius_test_form_attribute('withdrawal-items-description')) }}
+
+    <div class="d-grid">
+        {{ buttons.submit('tmonier_withdrawal.ui.continue'|trans, 'withdrawal-continue', null, 'btn-primary') }}
+    </div>
+{{ form_end(form, {'render_rest': true}) }}

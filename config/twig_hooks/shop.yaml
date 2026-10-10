@@ -1,0 +1,54 @@
+sylius_twig_hooks:
+    hooks:
+        # Art. 11a(1): the withdrawal function is reachable from every page.
+        'sylius_shop.base.footer.content.menu.help_links':
+            tmonier_withdrawal:
+                template: '@TmonierSyliusWithdrawalPlugin/shop/footer/withdrawal_link.html.twig'
+                priority: -100
+
+        'sylius_shop.account.order.show.content.main.header.buttons':
+            tmonier_withdrawal:
+                template: '@TmonierSyliusWithdrawalPlugin/shop/account_order/withdrawal_button.html.twig'
+                priority: -100
+
+        'tmonier_withdrawal.shop.withdrawal.form':
+            content:
+                template: '@TmonierSyliusWithdrawalPlugin/shop/withdrawal/form/content.html.twig'
+                priority: 0
+
+        'tmonier_withdrawal.shop.withdrawal.form.content':
+            header:
+                template: '@TmonierSyliusWithdrawalPlugin/shop/withdrawal/form/header.html.twig'
+                priority: 100
+            form:
+                template: '@TmonierSyliusWithdrawalPlugin/shop/withdrawal/form/form.html.twig'
+                priority: 0
+
+        'tmonier_withdrawal.shop.withdrawal.confirm':
+            content:
+                template: '@TmonierSyliusWithdrawalPlugin/shop/withdrawal/confirm/content.html.twig'
+                priority: 0
+
+        'tmonier_withdrawal.shop.withdrawal.confirm.content':
+            header:
+                template: '@TmonierSyliusWithdrawalPlugin/shop/withdrawal/confirm/header.html.twig'
+                priority: 200
+            summary:
+                template: '@TmonierSyliusWithdrawalPlugin/shop/withdrawal/confirm/summary.html.twig'
+                priority: 100
+            actions:
+                template: '@TmonierSyliusWithdrawalPlugin/shop/withdrawal/confirm/actions.html.twig'
+                priority: 0
+
+        'tmonier_withdrawal.shop.withdrawal.done':
+            content:
+                template: '@TmonierSyliusWithdrawalPlugin/shop/withdrawal/done/content.html.twig'
+                priority: 0
+
+        'tmonier_withdrawal.shop.withdrawal.done.content':
+            header:
+                template: '@TmonierSyliusWithdrawalPlugin/shop/withdrawal/done/header.html.twig'
+                priority: 100
+            summary:
+                template: '@TmonierSyliusWithdrawalPlugin/shop/withdrawal/done/summary.html.twig'
+                priority: 0

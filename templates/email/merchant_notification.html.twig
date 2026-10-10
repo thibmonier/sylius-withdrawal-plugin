@@ -1,0 +1,15 @@
+{% extends '@SyliusCore/Email/layout.html.twig' %}
+
+{% block subject %}
+    {{ 'tmonier_withdrawal.email.merchant_notification.subject'|trans({'%reference%': withdrawalRequest.reference, '%order%': withdrawalRequest.orderNumber}, null, localeCode) }}
+{% endblock %}
+
+{% block content %}
+    <p>{{ 'tmonier_withdrawal.email.merchant_notification.body'|trans({}, null, localeCode) }}</p>
+
+    {% include '@TmonierSyliusWithdrawalPlugin/email/_statement.html.twig' %}
+
+    {% if withdrawalRequest.order is null %}
+        <p style="color: #b54708;">{{ 'tmonier_withdrawal.ui.order_not_matched'|trans({}, null, localeCode) }}</p>
+    {% endif %}
+{% endblock %}

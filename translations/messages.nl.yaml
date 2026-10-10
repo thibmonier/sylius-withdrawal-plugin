@@ -1,0 +1,57 @@
+tmonier_withdrawal:
+    ui:
+        withdraw_from_contract_here: hier de overeenkomst herroepen
+        confirm_withdrawal: herroeping bevestigen
+        form_intro: Gebruik dit formulier om een op deze website gesloten overeenkomst te herroepen. Inloggen is niet nodig en u hoeft geen reden op te geven.
+        continue: Doorgaan
+        edit: Mijn verklaring wijzigen
+        review_your_statement: Controleer uw herroepingsverklaring
+        review_intro: Uw herroeping wordt pas verzonden nadat u deze hieronder bevestigt.
+        statement_text: Hierbij deel ik u mede dat ik onze overeenkomst betreffende de verkoop van de volgende producten / de levering van de volgende dienst herroep.
+        scope: Betrokken producten of diensten
+        whole_contract: De volledige overeenkomst
+        withdrawal_received: Uw herroeping is ontvangen
+        received_on: We hebben uw herroepingsverklaring ontvangen op %date% (referentie %reference%).
+        acknowledgement_sent: Een ontvangstbevestiging is verzonden naar %email%.
+        reference: Referentie
+        submitted_at: Verzonden op
+        acknowledged_at: Ontvangstbevestiging verzonden op
+        not_sent: Niet verzonden
+        processed_at: Verwerkt op
+        deadline_at: Einde herroepingstermijn
+        timeliness: Termijn
+        timeliness_unknown: Onbekend
+        timeliness_unknown_help: Geen overeenkomende bestelling gevonden, de termijn kan niet worden berekend.
+        in_time: Op tijd
+        late: Te laat
+        order_not_matched: Geen bestelling van dit kanaal komt overeen met dit nummer en e-mailadres. Controleer de aanvraag handmatig.
+        statement: Verklaring
+        accept: Accepteren
+        reject: Weigeren
+        withdrawal_request: Herroeping
+        withdrawal_requests: Herroepingen
+        customer_name: Klant
+        state:
+            received: Ontvangen
+            accepted: Geaccepteerd
+            rejected: Geweigerd
+    form:
+        customer_name: Volledige naam
+        email: E-mailadres
+        email_help: De ontvangstbevestiging wordt naar dit adres verzonden.
+        order_number: Bestelnummer
+        order_number_help: U vindt het in de bevestigingsmail van uw bestelling.
+        order_items: Betrokken artikelen
+        order_items_help: Vink niets aan om de volledige bestelling te herroepen.
+        items_description: Betrokken producten of diensten (optioneel)
+        items_description_help: Laat leeg om de volledige overeenkomst te herroepen.
+    email:
+        hello: Beste %name%,
+        acknowledgement:
+            subject: Ontvangstbevestiging van uw herroeping (%reference%)
+            title: Herroeping ontvangen
+            body: We bevestigen dat %channel% uw herroepingsverklaring heeft ontvangen. De inhoud en de datum en het tijdstip van verzending staan hieronder.
+            keep: Bewaar deze e-mail als bewijs van uw herroeping.
+        merchant_notification:
+            subject: Nieuwe herroeping %reference% voor bestelling %order%
+            body: Een klant heeft via de herroepingsfunctie van uw winkel een herroepingsverklaring ingediend.

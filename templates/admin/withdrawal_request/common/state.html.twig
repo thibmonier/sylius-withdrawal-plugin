@@ -1,0 +1,2 @@
+{% set colors = {'received': 'yellow', 'accepted': 'green', 'rejected': 'red'} %}
+<span class="badge bg-{{ colors[state]|default('secondary') }}-lt">{{ ('tmonier_withdrawal.ui.state.' ~ state)|trans }}</span>

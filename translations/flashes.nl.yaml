@@ -1,0 +1,4 @@
+tmonier_withdrawal:
+    withdrawal_request:
+        accept: De herroeping is geaccepteerd.
+        reject: De herroeping is geweigerd.

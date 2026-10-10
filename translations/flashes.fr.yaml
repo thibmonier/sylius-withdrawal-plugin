@@ -1,0 +1,4 @@
+tmonier_withdrawal:
+    withdrawal_request:
+        accept: La rétractation a été acceptée.
+        reject: La rétractation a été refusée.

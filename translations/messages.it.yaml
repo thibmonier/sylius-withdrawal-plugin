@@ -1,0 +1,57 @@
+tmonier_withdrawal:
+    ui:
+        withdraw_from_contract_here: recedere dal contratto qui
+        confirm_withdrawal: conferma recesso
+        form_intro: Utilizzi questo modulo per recedere da un contratto concluso su questo sito. Non è necessario accedere né indicare un motivo.
+        continue: Continua
+        edit: Modifica la dichiarazione
+        review_your_statement: Verifichi la sua dichiarazione di recesso
+        review_intro: Il recesso viene inviato solo dopo la conferma qui sotto.
+        statement_text: Con la presente notifico il recesso dal mio contratto di vendita dei seguenti beni / di prestazione del seguente servizio.
+        scope: Beni o servizi interessati
+        whole_contract: L'intero contratto
+        withdrawal_received: Il suo recesso è stato ricevuto
+        received_on: Abbiamo ricevuto la sua dichiarazione di recesso il %date% (riferimento %reference%).
+        acknowledgement_sent: Una conferma di ricevimento è stata inviata a %email%.
+        reference: Riferimento
+        submitted_at: Inviato il
+        acknowledged_at: Conferma di ricevimento inviata il
+        not_sent: Non inviata
+        processed_at: Gestito il
+        deadline_at: Fine del periodo di recesso
+        timeliness: Termine
+        timeliness_unknown: Sconosciuto
+        timeliness_unknown_help: Nessun ordine corrispondente, il termine non può essere calcolato.
+        in_time: Nei termini
+        late: Fuori termine
+        order_not_matched: Nessun ordine di questo canale corrisponde a questo numero e indirizzo e-mail. Verificare la richiesta manualmente.
+        statement: Dichiarazione
+        accept: Accetta
+        reject: Rifiuta
+        withdrawal_request: Recesso
+        withdrawal_requests: Recessi
+        customer_name: Cliente
+        state:
+            received: Ricevuto
+            accepted: Accettato
+            rejected: Rifiutato
+    form:
+        customer_name: Nome e cognome
+        email: Indirizzo e-mail
+        email_help: La conferma di ricevimento sarà inviata a questo indirizzo.
+        order_number: Numero d'ordine
+        order_number_help: Lo trova nell'e-mail di conferma dell'ordine.
+        order_items: Articoli interessati
+        order_items_help: Non selezioni nulla per recedere dall'intero ordine.
+        items_description: Beni o servizi interessati (facoltativo)
+        items_description_help: Lasci vuoto per recedere dall'intero contratto.
+    email:
+        hello: Gentile %name%,
+        acknowledgement:
+            subject: Conferma di ricevimento del suo recesso (%reference%)
+            title: Recesso ricevuto
+            body: Confermiamo che %channel% ha ricevuto la sua dichiarazione di recesso. Contenuto, data e ora di invio sono riportati qui sotto.
+            keep: Conservi questa e-mail come prova del suo recesso.
+        merchant_notification:
+            subject: Nuovo recesso %reference% per l'ordine %order%
+            body: Un cliente ha inviato una dichiarazione di recesso tramite la funzione di recesso del suo negozio.

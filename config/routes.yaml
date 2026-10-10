@@ -1,0 +1,14 @@
+# Import this file from your application's config/routes:
+#
+# tmonier_sylius_withdrawal:
+#     resource: "@TmonierSyliusWithdrawalPlugin/config/routes.yaml"
+
+tmonier_withdrawal_admin:
+    resource: "@TmonierSyliusWithdrawalPlugin/config/routes/admin.yaml"
+    prefix: '/%sylius_admin.path_name%'
+
+tmonier_withdrawal_shop:
+    resource: "@TmonierSyliusWithdrawalPlugin/config/routes/shop.yaml"
+    prefix: /{_locale}
+    requirements:
+        _locale: ^[A-Za-z]{2,4}(_([A-Za-z]{4}|[0-9]{3}))?(_([A-Za-z]{2}|[0-9]{3}))?$

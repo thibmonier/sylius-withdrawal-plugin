@@ -1,0 +1,8 @@
+{% set in_time = withdrawal_request.submittedInTime %}
+{% if in_time is null %}
+    <span class="badge bg-secondary-lt" title="{{ 'tmonier_withdrawal.ui.timeliness_unknown_help'|trans }}">{{ 'tmonier_withdrawal.ui.timeliness_unknown'|trans }}</span>
+{% elseif in_time %}
+    <span class="badge bg-green-lt">{{ 'tmonier_withdrawal.ui.in_time'|trans }}</span>
+{% else %}
+    <span class="badge bg-orange-lt">{{ 'tmonier_withdrawal.ui.late'|trans }}</span>
+{% endif %}

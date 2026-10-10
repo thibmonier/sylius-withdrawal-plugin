@@ -1,0 +1,4 @@
+tmonier_withdrawal:
+    withdrawal_request:
+        accept: The withdrawal has been accepted.
+        reject: The withdrawal has been rejected.
