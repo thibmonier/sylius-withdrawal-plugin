@@ -31,7 +31,7 @@ final class ShopWithdrawalTest extends WebTestCase
         self::assertResponseIsSuccessful();
         $link = $crawler->filter('[data-test-withdrawal-footer-link]');
         self::assertCount(1, $link);
-        self::assertSame('withdraw from contract here', trim($link->text()));
+        self::assertSame('Withdraw from contract here', trim($link->text()));
     }
 
     public function testAGuestWithdrawsFromAPlacedOrderInTwoSteps(): void

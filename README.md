@@ -32,6 +32,16 @@ Also included:
   the Official Journal and checked by tests.
 - **Customisable** through Twig Hooks; MySQL, MariaDB and PostgreSQL support.
 
+## Screenshots
+
+| Confirmation step | Acknowledgement of receipt |
+|---|---|
+| ![Confirmation step](docs/images/shop-confirm.png) | ![Acknowledgement e-mail](docs/images/email-acknowledgement.png) |
+
+![Admin grid](docs/images/admin-grid.png)
+
+![Admin detail](docs/images/admin-show.png)
+
 ## Requirements
 
 | | Version |

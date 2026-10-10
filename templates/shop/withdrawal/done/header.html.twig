@@ -4,7 +4,7 @@
     <h1 class="h2" {{ sylius_test_html_attribute('withdrawal-received') }}>{{ 'tmonier_withdrawal.ui.withdrawal_received'|trans }}</h1>
     <p>
         {{ 'tmonier_withdrawal.ui.received_on'|trans({
-            '%date%': withdrawal_request.submittedAt|format_datetime('long', 'medium', locale: app.request.locale),
+            '%date%': withdrawal_request.submittedAt|format_datetime('long', 'long', locale: app.request.locale),
             '%reference%': withdrawal_request.reference,
         }) }}
     </p>
