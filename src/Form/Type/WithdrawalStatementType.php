@@ -80,8 +80,13 @@ final class WithdrawalStatementType extends AbstractType
         $choices = [];
         /** @var OrderItemInterface $item */
         foreach ($order->getItems() as $item) {
+            $id = $item->getId();
+            if (!is_int($id)) {
+                continue;
+            }
+
             $label = trim(sprintf('%s %s', $item->getProductName() ?? '', $item->getVariantName() ?? ''));
-            $choices[sprintf('%s × %d', $label, $item->getQuantity())] = (int) $item->getId();
+            $choices[sprintf('%s × %d', $label, $item->getQuantity())] = $id;
         }
 
         return $choices;

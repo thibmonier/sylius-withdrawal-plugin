@@ -49,7 +49,9 @@ final class AdminAndCustomerWithdrawalTest extends WebTestCase
 
         $firstItem = $order->getItems()->first();
         self::assertNotFalse($firstItem);
-        $values['tmonier_withdrawal_statement']['orderItemIds'] = [(string) $firstItem->getId()];
+        $firstItemId = $firstItem->getId();
+        self::assertIsInt($firstItemId);
+        $values['tmonier_withdrawal_statement']['orderItemIds'] = [(string) $firstItemId];
         $this->client->request('POST', $form->getUri(), $values);
         $this->client->followRedirect();
         self::assertSelectorTextContains('dd:last-child', (string) $firstItem->getProductName());
@@ -76,7 +78,9 @@ final class AdminAndCustomerWithdrawalTest extends WebTestCase
         self::assertStringContainsString((string) $request->getReference(), $crawler->filter('table')->text());
         self::assertSelectorExists('a[href="/admin/withdrawal-requests"]');
 
-        $this->client->request('GET', sprintf('/admin/withdrawal-requests/%d', $request->getId()));
+        $requestId = $request->getId();
+        self::assertIsInt($requestId);
+        $this->client->request('GET', sprintf('/admin/withdrawal-requests/%d', $requestId));
         self::assertResponseIsSuccessful();
         self::assertSelectorTextContains('[data-test-reference]', (string) $request->getReference());
         self::assertSelectorTextContains('[data-test-timeliness]', 'Unknown');

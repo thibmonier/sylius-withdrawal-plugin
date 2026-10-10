@@ -12,7 +12,6 @@ use Sylius\Component\Core\Model\Channel;
 use Sylius\Component\Core\Model\Customer;
 use Sylius\Component\Core\Model\Order;
 use Sylius\Component\Core\Model\OrderItem;
-use Sylius\Resource\Factory\Factory;
 use Sylius\Resource\Factory\FactoryInterface;
 use Symfony\Component\Clock\MockClock;
 use Tmonier\SyliusWithdrawalPlugin\Entity\WithdrawalRequest;
@@ -117,10 +116,18 @@ final class WithdrawalRequestSubmitterTest extends TestCase
         $referenceGenerator = $this->createMock(ReferenceGeneratorInterface::class);
         $referenceGenerator->method('generate')->willReturn('WREF123');
 
-        /** @var FactoryInterface<WithdrawalRequestInterface> $requestFactory */
-        $requestFactory = new Factory(WithdrawalRequest::class);
-        /** @var FactoryInterface<WithdrawalRequestItemInterface> $itemFactory */
-        $itemFactory = new Factory(WithdrawalRequestItem::class);
+        $requestFactory = new /** @implements FactoryInterface<WithdrawalRequestInterface> */ class() implements FactoryInterface {
+            public function createNew(): WithdrawalRequestInterface
+            {
+                return new WithdrawalRequest();
+            }
+        };
+        $itemFactory = new /** @implements FactoryInterface<WithdrawalRequestItemInterface> */ class() implements FactoryInterface {
+            public function createNew(): WithdrawalRequestItemInterface
+            {
+                return new WithdrawalRequestItem();
+            }
+        };
 
         return new WithdrawalRequestSubmitter(
             $requestFactory,
