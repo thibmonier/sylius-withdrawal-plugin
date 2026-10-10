@@ -1,6 +1,6 @@
 {% import '@SyliusShop/shared/buttons.html.twig' as buttons %}
 
-{% set order = hookable_metadata.context.order %}
+{% set order = hookable_metadata.context.order|default(null) %}
 
 <form action="{{ path('tmonier_withdrawal_shop_confirm', order ? {'order': order.number} : {}) }}" method="post" novalidate>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token(hookable_metadata.context.csrf_token_id) }}">

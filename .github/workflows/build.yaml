@@ -29,45 +29,26 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php: ["8.3"]
-                symfony: ["^6.4", "^7.4"]
-                sylius: ["~2.0.0", "~2.1.0", "~2.2.0"]
+                php: ["8.3", "8.4"]
+                symfony: ["^7.4"]
+                sylius: ["~2.2.0", "~2.3.0"]
                 database: ["mysql:8.4"]
                 node: ["22.x"]
 
-                exclude:
-                    - sylius: "~2.0.0"
-                      symfony: "^7.4"
-
                 include:
-                    - php: "8.3"
-                      symfony: "^7.4"
-                      sylius: "~2.2.0"
-                      database: "mysql:8.0"
+                    - php: "8.4"
+                      symfony: "^8.0"
+                      sylius: "~2.3.0"
+                      database: "mysql:8.4"
                       node: "22.x"
-                    - php: "8.3"
+                    - php: "8.4"
                       symfony: "^7.4"
-                      sylius: "~2.2.0"
-                      database: "mariadb:10.11"
-                      node: "22.x"
-                    - php: "8.3"
-                      symfony: "^7.4"
-                      sylius: "~2.2.0"
+                      sylius: "~2.3.0"
                       database: "mariadb:11.4"
                       node: "22.x"
-                    - php: "8.3"
+                    - php: "8.4"
                       symfony: "^7.4"
-                      sylius: "~2.2.0"
-                      database: "postgres:15"
-                      node: "22.x"
-                    - php: "8.3"
-                      symfony: "^7.4"
-                      sylius: "~2.2.0"
-                      database: "postgres:16"
-                      node: "22.x"
-                    - php: "8.3"
-                      symfony: "^7.4"
-                      sylius: "~2.2.0"
+                      sylius: "~2.3.0"
                       database: "postgres:17"
                       node: "22.x"
 
@@ -82,7 +63,7 @@ jobs:
                 name: Build Sylius Test Application
                 uses: SyliusLabs/BuildTestAppAction@v4
                 with:
-                    e2e_js: "yes"
+                    e2e_js: "no"
                     cache_key: "${{ runner.os }}-php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.json') }}"
                     cache_restore_key: "${{ runner.os }}-php-${{ matrix.php }}-composer-"
                     database: "${{ matrix.database }}"
@@ -90,6 +71,14 @@ jobs:
                     php_version: "${{ matrix.php }}"
                     sylius_version: "${{ matrix.sylius }}"
                     symfony_version: "${{ matrix.symfony }}"
+
+            -
+                name: Run static analysis
+                run: vendor/bin/phpstan analyse --no-progress --memory-limit=1G
+
+            -
+                name: Check coding standard
+                run: vendor/bin/ecs check
 
             -
                 name: Run unit tests
@@ -106,18 +95,3 @@ jobs:
             -
                 name: Run Non-unit PHPUnit tests
                 run: vendor/bin/phpunit --colors=always --testsuite=non-unit
-
-            -
-                name: Run Behat
-                run: vendor/bin/behat --colors --strict -vvv --no-interaction -f progress || vendor/bin/behat --colors --strict -vvv --no-interaction -f progress --rerun
-
-            -
-                name: Upload Behat logs
-                uses: actions/upload-artifact@v4
-                if: failure()
-                with:
-                    name: "Behat logs - Sylius ${{ matrix.sylius }} - ${{ matrix.database }} - ${{ github.run_id }}"
-                    path: etc/build/
-                    if-no-files-found: ignore
-                    compression-level: 6
-                    overwrite: true

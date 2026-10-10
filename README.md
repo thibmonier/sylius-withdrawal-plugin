@@ -1,129 +1,144 @@
-<p align="center">
-    <a href="https://sylius.com" target="_blank">
-        <picture>
-          <source media="(prefers-color-scheme: dark)" srcset="https://media.sylius.com/sylius-logo-800-dark.png">
-          <source media="(prefers-color-scheme: light)" srcset="https://media.sylius.com/sylius-logo-800.png">
-          <img alt="Sylius Logo." src="https://media.sylius.com/sylius-logo-800.png">
-        </picture>
-    </a>
-</p>
+# Sylius Withdrawal Plugin
 
-<h1 align="center">Plugin Skeleton</h1>
+**The EU "withdraw from contract here" button for Sylius 2.**
 
-<p align="center">Skeleton for starting Sylius plugins.</p>
+Since **19 June 2026**, every online shop selling to consumers in the European Union must offer
+a *withdrawal function*: a clearly labelled button letting consumers withdraw from a distance
+contract online, followed by a confirmation step and an acknowledgement of receipt on a durable
+medium ([Article 11a of Directive 2011/83/EU][art11a], introduced by [Directive (EU) 2023/2673][dir]).
 
-## Documentation
+This plugin implements it for Sylius 2.2+, free and open source.
 
-For a comprehensive guide on Sylius Plugins development please go to Sylius documentation,
-there you will find the <a href="https://docs.sylius.com/plugins-development-guide/how-to-create-a-plugin-for-sylius">Plugin Development Guide</a> - it's a great place to start.
+## Features
 
-For more information about the **Test Application** included in the skeleton, please refer to the [Sylius documentation](https://docs.sylius.com/plugins-development-guide/test-application).
+| Requirement (Art. 11a) | What the plugin does |
+|---|---|
+| Function labelled *"withdraw from contract here"*, continuously available, easily accessible | Link in the footer of every shop page and button on the customer's order page. No login required. |
+| Consumer provides or confirms name, contract and e-mail | Statement form, prefilled for logged-in customers (recital 37) |
+| Separate step labelled only *"confirm withdrawal"* | Dedicated confirmation page with a single confirm button; nothing is recorded before it |
+| Acknowledgement of receipt on a durable medium with content, date and time | E-mail sent immediately with the full statement and the server timestamp |
+| Statement sent within the period is timely | Statements are **never refused**; timeliness is computed and shown to the merchant |
 
-## Quickstart Installation
+Also included:
 
-Run `composer create-project sylius/plugin-skeleton ProjectName`.
+- **Partial withdrawal**: logged-in customers pick the order items; guests describe them in free text.
+- **Back office**: *Sales → Withdrawals* grid with filters, detail page, *accept* / *reject*
+  workflow (Symfony Workflow), deadline and timeliness indicator, and proof that the
+  acknowledgement was sent.
+- **Order matching** without order enumeration: a guest statement is linked to the order only
+  when the number **and** the customer e-mail match, and the response is the same either way.
+- **Merchant notification** e-mail to the channel contact address.
+- **Official wording** in English, French, German, Spanish, Italian, Dutch and Polish, taken from
+  the Official Journal and checked by tests.
+- **Customisable** through Twig Hooks; MySQL, MariaDB and PostgreSQL support.
 
-### Traditional
+## Requirements
 
-1. From the plugin skeleton root directory, run the following commands:
+| | Version |
+|---|---|
+| PHP | 8.2+ |
+| Sylius | 2.2, 2.3 |
+| Symfony | 6.4, 7.4, 8.0 |
 
-    ```bash
-    (cd vendor/sylius/test-application && yarn install)
-    (cd vendor/sylius/test-application && yarn build)
-    vendor/bin/console assets:install
-   
-    vendor/bin/console doctrine:database:create
-    vendor/bin/console doctrine:migrations:migrate -n
-    # Optionally load data fixtures
-    vendor/bin/console sylius:fixtures:load -n
-    ```
+## Installation
 
-To be able to set up a plugin's database, remember to configure your database credentials in `tests/TestApplication/.env` and `tests/TestApplication/.env.test`.
-
-2. Run your local server:
-
-      ```bash
-      symfony server:ca:install
-      symfony server:start -d
-      ```
-
-3. Open your browser and navigate to `https://localhost:8000`.
-
-### Docker
-
-1. Execute `make init` to initialize the container and install the dependencies.
-
-2. Execute `make database-init` to create the database and run migrations.
-
-3. (Optional) Execute `make load-fixtures` to load the fixtures.
-
-4. Your app is available at `http://localhost`.
-
-## Usage
-
-### Running plugin tests
-
-  - PHPUnit
+1. Require the package:
 
     ```bash
-    vendor/bin/phpunit
+    composer require tmonier/sylius-withdrawal-plugin
     ```
 
-  - Behat (non-JS scenarios)
+2. Register the bundle in `config/bundles.php` (Symfony Flex does it automatically once a recipe exists):
+
+    ```php
+    Tmonier\SyliusWithdrawalPlugin\TmonierSyliusWithdrawalPlugin::class => ['all' => true],
+    ```
+
+3. Import the configuration in `config/packages/tmonier_sylius_withdrawal.yaml`:
+
+    ```yaml
+    imports:
+        - { resource: "@TmonierSyliusWithdrawalPlugin/config/config.yaml" }
+    ```
+
+4. Import the routes in `config/routes/tmonier_sylius_withdrawal.yaml`:
+
+    ```yaml
+    tmonier_sylius_withdrawal:
+        resource: "@TmonierSyliusWithdrawalPlugin/config/routes.yaml"
+    ```
+
+5. Run the migrations:
 
     ```bash
-    vendor/bin/behat --strict --tags="~@javascript&&~@mink:chromedriver"
+    bin/console doctrine:migrations:migrate
     ```
 
-  - Behat (JS scenarios)
- 
-    1. [Install Symfony CLI command](https://symfony.com/download).
- 
-    2. Start Headless Chrome:
-    
-      ```bash
-      google-chrome-stable --enable-automation --disable-background-networking --no-default-browser-check --no-first-run --disable-popup-blocking --disable-default-apps --allow-insecure-localhost --disable-translate --disable-extensions --no-sandbox --enable-features=Metal --headless --remote-debugging-port=9222 --window-size=2880,1800 --proxy-server='direct://' --proxy-bypass-list='*' http://127.0.0.1
-      ```
-    
-    3. Install SSL certificates (only once needed) and run test application's webserver on `127.0.0.1:8080`:
-    
-      ```bash
-      symfony server:ca:install
-      APP_ENV=test symfony server:start --port=8080 --daemon
-      ```
-    
-    4. Run Behat:
-    
-      ```bash
-      vendor/bin/behat --strict --tags="@javascript,@mink:chromedriver"
-      ```
-    
-  - Static Analysis
-      
-    - PHPStan
-    
-      ```bash
-      vendor/bin/phpstan analyse -c phpstan.neon -l max src/  
-      ```
+6. Make sure each channel has a **contact e-mail** if you want to receive merchant notifications.
 
-  - Coding Standard
-  
-    ```bash
-    vendor/bin/ecs check
-    ```
+## Configuration
 
-### Opening Sylius with your plugin
+```yaml
+# config/packages/tmonier_sylius_withdrawal.yaml
+tmonier_sylius_withdrawal:
+    period_days: 14        # used to flag late statements; never used to refuse one
+    notify_merchant: true  # copy of each statement to the channel contact e-mail
+```
 
-- Using `test` environment:
+The withdrawal period starts when the goods are delivered (Art. 9). Sylius does not track
+delivery, so the plugin uses the last shipment date, falling back to the checkout completion
+date. The deadline is informational.
 
-    ```bash
-    APP_ENV=test vendor/bin/console sylius:fixtures:load -n
-    APP_ENV=test symfony server:start -d
-    ```
-    
-- Using `dev` environment:
+## Customisation
 
-    ```bash
-    vendor/bin/console sylius:fixtures:load -n
-    symfony server:start -d
-    ```
+Every page is built with [Twig Hooks](https://stack.sylius.com/twig-hooks/getting-started):
+
+| Hook | Content |
+|---|---|
+| `sylius_shop.base.footer.content.menu.help_links` → `tmonier_withdrawal` | Footer link |
+| `sylius_shop.account.order.show.content.main.header.buttons` → `tmonier_withdrawal` | Button on the account order page |
+| `tmonier_withdrawal.shop.withdrawal.form.content` | Statement form page |
+| `tmonier_withdrawal.shop.withdrawal.confirm.content` | Confirmation page |
+| `tmonier_withdrawal.shop.withdrawal.done.content` | Acknowledgement page |
+| `tmonier_withdrawal.admin.withdrawal_request.show.content.sections#left/#right` | Admin detail page |
+
+E-mail templates can be overridden in `templates/bundles/TmonierSyliusWithdrawalPlugin/email/`.
+
+> [!IMPORTANT]
+> If you move or restyle the footer link, keep it **prominent and reachable from every page**,
+> and keep the confirm button labelled **only** with the official wording.
+
+## What you still have to do
+
+The plugin provides the technical function. As a merchant you remain responsible for:
+
+- mentioning the existence and placement of the withdrawal function in your pre-contractual
+  information and terms (Art. 6(1)(h) as amended);
+- processing refunds (for example with [`sylius/refund-plugin`](https://github.com/Sylius/RefundPlugin));
+- handling the exceptions of Art. 16 (personalised goods, perishables, etc.) when you review a statement;
+- checking national transposition specifics.
+
+This plugin is not legal advice.
+
+## Development
+
+```bash
+docker compose up -d mysql mailhog   # or your own MySQL
+composer install
+(cd vendor/sylius/test-application && yarn install && yarn build)
+vendor/bin/console doctrine:database:create
+vendor/bin/console doctrine:migrations:migrate -n
+vendor/bin/console sylius:fixtures:load -n
+
+vendor/bin/phpunit --testsuite unit
+APP_ENV=test vendor/bin/phpunit --testsuite non-unit   # needs a test database with fixtures
+vendor/bin/phpstan analyse
+vendor/bin/ecs check
+```
+
+## License
+
+MIT. See [LICENSE](LICENSE).
+
+[art11a]: https://eur-lex.europa.eu/eli/dir/2011/83/oj
+[dir]: https://eur-lex.europa.eu/eli/dir/2023/2673/oj

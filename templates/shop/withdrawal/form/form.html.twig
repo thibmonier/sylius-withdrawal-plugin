@@ -1,7 +1,7 @@
 {% import '@SyliusShop/shared/buttons.html.twig' as buttons %}
 
 {% set form = hookable_metadata.context.form %}
-{% set order = hookable_metadata.context.order %}
+{% set order = hookable_metadata.context.order|default(null) %}
 
 {{ form_start(form, {'action': path('tmonier_withdrawal_shop_form', order ? {'order': order.number} : {}), 'attr': {'novalidate': 'novalidate'}}) }}
     {{ form_row(form.customerName, sylius_test_form_attribute('withdrawal-customer-name')) }}

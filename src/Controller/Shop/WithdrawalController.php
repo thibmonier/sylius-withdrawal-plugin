@@ -13,6 +13,7 @@ use Sylius\Component\Locale\Context\LocaleContextInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Tmonier\SyliusWithdrawalPlugin\Form\Type\WithdrawalStatementType;
 use Tmonier\SyliusWithdrawalPlugin\Model\WithdrawalStatement;
 use Tmonier\SyliusWithdrawalPlugin\Order\OrderMatcherInterface;
@@ -64,7 +65,7 @@ final class WithdrawalController extends AbstractController
         }
 
         return $this->render('@TmonierSyliusWithdrawalPlugin/shop/withdrawal/form.html.twig', [
-            'form' => $form->createView(),
+            'form' => $form,
             'order' => $order,
         ]);
     }
@@ -84,7 +85,7 @@ final class WithdrawalController extends AbstractController
 
         if ($request->isMethod('POST')) {
             if (!$this->isCsrfTokenValid(self::CSRF_TOKEN_ID, $request->request->getString('_csrf_token'))) {
-                throw $this->createAccessDeniedException('Invalid CSRF token.');
+                throw new BadRequestHttpException('Invalid CSRF token.');
             }
 
             /** @var ChannelInterface $channel */

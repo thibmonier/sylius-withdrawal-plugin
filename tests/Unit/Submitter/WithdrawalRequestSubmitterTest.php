@@ -13,9 +13,12 @@ use Sylius\Component\Core\Model\Customer;
 use Sylius\Component\Core\Model\Order;
 use Sylius\Component\Core\Model\OrderItem;
 use Sylius\Resource\Factory\Factory;
+use Sylius\Resource\Factory\FactoryInterface;
 use Symfony\Component\Clock\MockClock;
 use Tmonier\SyliusWithdrawalPlugin\Entity\WithdrawalRequest;
+use Tmonier\SyliusWithdrawalPlugin\Entity\WithdrawalRequestInterface;
 use Tmonier\SyliusWithdrawalPlugin\Entity\WithdrawalRequestItem;
+use Tmonier\SyliusWithdrawalPlugin\Entity\WithdrawalRequestItemInterface;
 use Tmonier\SyliusWithdrawalPlugin\Generator\ReferenceGeneratorInterface;
 use Tmonier\SyliusWithdrawalPlugin\Mailer\WithdrawalEmailManagerInterface;
 use Tmonier\SyliusWithdrawalPlugin\Model\WithdrawalStatement;
@@ -85,9 +88,11 @@ final class WithdrawalRequestSubmitterTest extends TestCase
         self::assertSame($customer, $request->getCustomer());
         self::assertSame($deadline, $request->getDeadlineAt());
         self::assertTrue($request->isSubmittedInTime());
+        $item = $request->getItems()->first();
+        self::assertNotFalse($item);
         self::assertCount(1, $request->getItems());
-        self::assertSame($kept, $request->getItems()->first()->getOrderItem());
-        self::assertSame('Product 10 Default', $request->getItems()->first()->getLabel());
+        self::assertSame($kept, $item->getOrderItem());
+        self::assertSame('Product 10 Default', $item->getLabel());
     }
 
     public function testItKeepsTheStatementWhenTheAcknowledgementFails(): void
@@ -112,9 +117,14 @@ final class WithdrawalRequestSubmitterTest extends TestCase
         $referenceGenerator = $this->createMock(ReferenceGeneratorInterface::class);
         $referenceGenerator->method('generate')->willReturn('WREF123');
 
+        /** @var FactoryInterface<WithdrawalRequestInterface> $requestFactory */
+        $requestFactory = new Factory(WithdrawalRequest::class);
+        /** @var FactoryInterface<WithdrawalRequestItemInterface> $itemFactory */
+        $itemFactory = new Factory(WithdrawalRequestItem::class);
+
         return new WithdrawalRequestSubmitter(
-            new Factory(WithdrawalRequest::class),
-            new Factory(WithdrawalRequestItem::class),
+            $requestFactory,
+            $itemFactory,
             $this->manager,
             $this->orderMatcher,
             $this->deadlineCalculator,
