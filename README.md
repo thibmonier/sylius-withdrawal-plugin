@@ -1,5 +1,8 @@
 # Sylius Withdrawal Plugin
 
+[![Build](https://github.com/thibmonier/sylius-withdrawal-plugin/actions/workflows/build.yaml/badge.svg)](https://github.com/thibmonier/sylius-withdrawal-plugin/actions/workflows/build.yaml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 **The EU "withdraw from contract here" button for Sylius 2.**
 
 Since **19 June 2026**, every online shop selling to consumers in the European Union must offer
