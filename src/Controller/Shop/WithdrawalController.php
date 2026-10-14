@@ -140,18 +140,20 @@ final class WithdrawalController extends AbstractController
         ]);
     }
 
-    /** Consumes one token per limiter (IP or IPv6 /56, and the normalized e-mail). */
+    /**
+     * Consumes one token per limiter (IP or IPv6 /56, then the normalized e-mail). A request
+     * already refused for its IP does not use the e-mail budget: a blocked sender cannot keep
+     * the owner of an address from confirming a statement from elsewhere.
+     */
     private function isRateLimited(Request $request, string $email): bool
     {
-        $limited = false;
-        if ($this->ipLimiter instanceof RateLimiterFactory) {
-            $limited = !$this->ipLimiter->create(RateLimitKeys::ip($request->getClientIp()))->consume()->isAccepted();
-        }
-        if ($this->emailLimiter instanceof RateLimiterFactory && '' !== $email) {
-            return !$this->emailLimiter->create(RateLimitKeys::email($email))->consume()->isAccepted() || $limited;
+        if ($this->ipLimiter instanceof RateLimiterFactory &&
+            !$this->ipLimiter->create(RateLimitKeys::ip($request->getClientIp()))->consume()->isAccepted()) {
+            return true;
         }
 
-        return $limited;
+        return $this->emailLimiter instanceof RateLimiterFactory && '' !== $email &&
+            !$this->emailLimiter->create(RateLimitKeys::email($email))->consume()->isAccepted();
     }
 
     private function getCustomer(): ?CustomerInterface

@@ -165,16 +165,34 @@ final class ShopWithdrawalTest extends WebTestCase
         self::assertSame(4, $this->countRequests());
     }
 
-    private function confirmStatement(string $email): void
+    public function testASenderBlockedByIpDoesNotUseTheBudgetOfAnEmail(): void
     {
-        $this->client->request('GET', '/en_US/withdrawal');
+        for ($attempt = 1; $attempt <= 4; ++$attempt) {
+            $this->confirmStatement(sprintf('attacker%d@example.com', $attempt), '203.0.113.7');
+        }
+        // Refused for the IP: the e-mail budget of the victim is untouched.
+        for ($attempt = 1; $attempt <= 3; ++$attempt) {
+            $this->confirmStatement('victim@example.com', '203.0.113.7');
+            self::assertResponseStatusCodeSame(429);
+        }
+
+        foreach (['198.51.100.1', '198.51.100.2'] as $ip) {
+            $this->confirmStatement('victim@example.com', $ip);
+            self::assertResponseRedirects('/en_US/withdrawal/done');
+        }
+    }
+
+    private function confirmStatement(string $email, string $ip = '127.0.0.1'): void
+    {
+        $server = ['REMOTE_ADDR' => $ip];
+        $this->client->request('GET', '/en_US/withdrawal', [], [], $server);
         $this->client->submitForm('withdrawal-continue', [
             'tmonier_withdrawal_statement[customerName]' => 'Jane Doe',
             'tmonier_withdrawal_statement[email]' => $email,
             'tmonier_withdrawal_statement[orderNumber]' => 'UNKNOWN-42',
-        ]);
+        ], 'POST', $server);
         $this->client->followRedirect();
-        $this->client->submitForm('withdrawal-confirm');
+        $this->client->submitForm('withdrawal-confirm', [], 'POST', $server);
     }
 
     private function findPlacedOrder(): OrderInterface
