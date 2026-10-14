@@ -9,10 +9,10 @@ use Sylius\Component\Core\Model\CustomerInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Repository\OrderRepositoryInterface;
 
-final class OrderMatcher implements OrderMatcherInterface
+final readonly class OrderMatcher implements OrderMatcherInterface
 {
     /** @param OrderRepositoryInterface<OrderInterface> $orderRepository */
-    public function __construct(private readonly OrderRepositoryInterface $orderRepository)
+    public function __construct(private OrderRepositoryInterface $orderRepository)
     {
     }
 
@@ -29,11 +29,11 @@ final class OrderMatcher implements OrderMatcherInterface
         }
 
         $orderCustomer = $order->getCustomer();
-        if (null === $orderCustomer) {
+        if (!$orderCustomer instanceof \Sylius\Component\Customer\Model\CustomerInterface) {
             return null;
         }
 
-        if (null !== $customer && $orderCustomer->getId() === $customer->getId()) {
+        if ($customer instanceof \Sylius\Component\Core\Model\CustomerInterface && $orderCustomer->getId() === $customer->getId()) {
             return $order;
         }
 

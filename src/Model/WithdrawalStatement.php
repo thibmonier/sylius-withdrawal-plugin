@@ -44,7 +44,7 @@ final class WithdrawalStatement
         $statement->itemsDescription = self::stringOrNull($data['itemsDescription'] ?? null);
 
         $orderItemIds = $data['orderItemIds'] ?? [];
-        $statement->orderItemIds = is_array($orderItemIds) ? array_values(array_map('intval', array_filter($orderItemIds, 'is_numeric'))) : [];
+        $statement->orderItemIds = is_array($orderItemIds) ? array_values(array_map(intval(...), array_filter($orderItemIds, is_numeric(...)))) : [];
 
         return $statement;
     }

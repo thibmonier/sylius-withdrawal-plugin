@@ -7,9 +7,9 @@ namespace Tmonier\SyliusWithdrawalPlugin\Mailer;
 use Sylius\Component\Mailer\Sender\SenderInterface;
 use Tmonier\SyliusWithdrawalPlugin\Entity\WithdrawalRequestInterface;
 
-final class WithdrawalEmailManager implements WithdrawalEmailManagerInterface
+final readonly class WithdrawalEmailManager implements WithdrawalEmailManagerInterface
 {
-    public function __construct(private readonly SenderInterface $emailSender)
+    public function __construct(private SenderInterface $emailSender)
     {
     }
 
