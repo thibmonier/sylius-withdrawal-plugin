@@ -8,9 +8,9 @@ use Psr\Clock\ClockInterface;
 use Symfony\Component\Workflow\Event\CompletedEvent;
 use Tmonier\SyliusWithdrawalPlugin\Entity\WithdrawalRequestInterface;
 
-final class WithdrawalRequestWorkflowListener
+final readonly class WithdrawalRequestWorkflowListener
 {
-    public function __construct(private readonly ClockInterface $clock)
+    public function __construct(private ClockInterface $clock)
     {
     }
 

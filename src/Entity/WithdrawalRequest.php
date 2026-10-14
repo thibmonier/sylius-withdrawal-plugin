@@ -207,7 +207,7 @@ class WithdrawalRequest implements WithdrawalRequestInterface
 
     public function isSubmittedInTime(): ?bool
     {
-        if (null === $this->deadlineAt || null === $this->submittedAt) {
+        if (!$this->deadlineAt instanceof \DateTimeImmutable || !$this->submittedAt instanceof \DateTimeImmutable) {
             return null;
         }
 

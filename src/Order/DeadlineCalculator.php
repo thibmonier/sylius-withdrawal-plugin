@@ -11,16 +11,16 @@ use Sylius\Component\Core\Model\OrderInterface;
  * delivery, so the last shipment date is used, falling back to the checkout completion date.
  * The result is only informational: requests are never refused on this basis.
  */
-final class DeadlineCalculator implements DeadlineCalculatorInterface
+final readonly class DeadlineCalculator implements DeadlineCalculatorInterface
 {
-    public function __construct(private readonly int $periodDays)
+    public function __construct(private int $periodDays)
     {
     }
 
     public function calculate(OrderInterface $order): ?\DateTimeImmutable
     {
         $referenceDate = $this->getLastShippedAt($order) ?? $order->getCheckoutCompletedAt();
-        if (null === $referenceDate) {
+        if (!$referenceDate instanceof \DateTimeInterface) {
             return null;
         }
 

@@ -51,7 +51,7 @@ final class WithdrawalController extends AbstractController
         /** @var array<string, mixed>|null $previous */
         $previous = $session->get(self::SESSION_STATEMENT);
         $statement = is_array($previous) ? WithdrawalStatement::fromArray($previous) : null;
-        if (null === $statement || (null !== $order && $statement->orderNumber !== $order->getNumber())) {
+        if (!$statement instanceof \Tmonier\SyliusWithdrawalPlugin\Model\WithdrawalStatement || ($order instanceof \Sylius\Component\Core\Model\OrderInterface && $statement->orderNumber !== $order->getNumber())) {
             $statement = $this->createPrefilledStatement($customer, $order);
         }
 
@@ -115,7 +115,7 @@ final class WithdrawalController extends AbstractController
     {
         $reference = $request->getSession()->get(self::SESSION_REFERENCE);
         $withdrawalRequest = is_string($reference) ? $this->withdrawalRequestRepository->findOneByReference($reference) : null;
-        if (null === $withdrawalRequest) {
+        if (!$withdrawalRequest instanceof \Tmonier\SyliusWithdrawalPlugin\Entity\WithdrawalRequestInterface) {
             return $this->redirectToRoute('tmonier_withdrawal_shop_form');
         }
 
@@ -128,13 +128,13 @@ final class WithdrawalController extends AbstractController
     {
         $customer = $this->customerContext->getCustomer();
 
-        return $customer instanceof CustomerInterface && null !== $customer->getUser() ? $customer : null;
+        return $customer instanceof CustomerInterface && $customer->getUser() instanceof \Sylius\Component\User\Model\UserInterface ? $customer : null;
     }
 
     /** Only resolves orders owned by the logged-in customer. */
     private function getCustomerOrder(string $orderNumber, ?CustomerInterface $customer): ?OrderInterface
     {
-        if ('' === $orderNumber || null === $customer) {
+        if ('' === $orderNumber || !$customer instanceof \Sylius\Component\Core\Model\CustomerInterface) {
             return null;
         }
 
@@ -147,12 +147,12 @@ final class WithdrawalController extends AbstractController
     private function createPrefilledStatement(?CustomerInterface $customer, ?OrderInterface $order): WithdrawalStatement
     {
         $statement = new WithdrawalStatement();
-        if (null !== $customer) {
+        if ($customer instanceof \Sylius\Component\Core\Model\CustomerInterface) {
             $statement->customerName = $customer->getFullName();
             $statement->email = $customer->getEmail();
         }
 
-        if (null !== $order) {
+        if ($order instanceof \Sylius\Component\Core\Model\OrderInterface) {
             $statement->orderNumber = $order->getNumber();
         }
 
@@ -162,7 +162,7 @@ final class WithdrawalController extends AbstractController
     /** @return list<string> */
     private function getSelectedItemLabels(?OrderInterface $order, WithdrawalStatement $statement): array
     {
-        if (null === $order || [] === $statement->orderItemIds) {
+        if (!$order instanceof \Sylius\Component\Core\Model\OrderInterface || [] === $statement->orderItemIds) {
             return [];
         }
 

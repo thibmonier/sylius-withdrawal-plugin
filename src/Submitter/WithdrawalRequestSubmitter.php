@@ -20,23 +20,23 @@ use Tmonier\SyliusWithdrawalPlugin\Model\WithdrawalStatement;
 use Tmonier\SyliusWithdrawalPlugin\Order\DeadlineCalculatorInterface;
 use Tmonier\SyliusWithdrawalPlugin\Order\OrderMatcherInterface;
 
-final class WithdrawalRequestSubmitter implements WithdrawalRequestSubmitterInterface
+final readonly class WithdrawalRequestSubmitter implements WithdrawalRequestSubmitterInterface
 {
     /**
      * @param FactoryInterface<WithdrawalRequestInterface> $withdrawalRequestFactory
      * @param FactoryInterface<WithdrawalRequestItemInterface> $withdrawalRequestItemFactory
      */
     public function __construct(
-        private readonly FactoryInterface $withdrawalRequestFactory,
-        private readonly FactoryInterface $withdrawalRequestItemFactory,
-        private readonly ObjectManager $withdrawalRequestManager,
-        private readonly OrderMatcherInterface $orderMatcher,
-        private readonly DeadlineCalculatorInterface $deadlineCalculator,
-        private readonly ReferenceGeneratorInterface $referenceGenerator,
-        private readonly WithdrawalEmailManagerInterface $emailManager,
-        private readonly ClockInterface $clock,
-        private readonly LoggerInterface $logger,
-        private readonly bool $notifyMerchant = true,
+        private FactoryInterface $withdrawalRequestFactory,
+        private FactoryInterface $withdrawalRequestItemFactory,
+        private ObjectManager $withdrawalRequestManager,
+        private OrderMatcherInterface $orderMatcher,
+        private DeadlineCalculatorInterface $deadlineCalculator,
+        private ReferenceGeneratorInterface $referenceGenerator,
+        private WithdrawalEmailManagerInterface $emailManager,
+        private ClockInterface $clock,
+        private LoggerInterface $logger,
+        private bool $notifyMerchant = true,
     ) {
     }
 
@@ -66,7 +66,7 @@ final class WithdrawalRequestSubmitter implements WithdrawalRequestSubmitterInte
             $customer,
         );
 
-        if (null !== $order) {
+        if ($order instanceof \Sylius\Component\Core\Model\OrderInterface) {
             $withdrawalRequest->setOrder($order);
             $withdrawalRequest->setDeadlineAt($this->deadlineCalculator->calculate($order));
             $orderCustomer = $order->getCustomer();
