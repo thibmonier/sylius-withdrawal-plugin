@@ -23,6 +23,10 @@ final class AdminAndCustomerWithdrawalTest extends WebTestCase
     {
         $this->client = self::createClient();
         $this->entityManager()->createQuery(sprintf('DELETE FROM %s', WithdrawalRequest::class))->execute();
+        // Rate limiter state of the previous tests.
+        $pool = self::getContainer()->get('cache.tmonier_withdrawal_limiter');
+        self::assertInstanceOf(\Psr\Cache\CacheItemPoolInterface::class, $pool);
+        $pool->clear();
     }
 
     public function testALoggedInCustomerWithdrawsFromSelectedItemsWithPrefilledData(): void

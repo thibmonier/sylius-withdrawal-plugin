@@ -37,6 +37,17 @@ final class Configuration implements ConfigurationInterface
                     ->info('Send a copy of each request to the channel contact email.')
                     ->defaultTrue()
                 ->end()
+                ->arrayNode('rate_limit')
+                    ->info('Limits the confirmed statements (symfony/rate-limiter), per IP and per e-mail: each one records a request and sends e-mails to the typed address.')
+                    ->addDefaultsIfNotSet()
+                    ->canBeDisabled()
+                    ->children()
+                        ->integerNode('per_ip')->defaultValue(10)->min(1)->end()
+                        ->integerNode('per_email')->defaultValue(3)->min(1)->end()
+                        ->scalarNode('interval')->defaultValue('1 hour')->cannotBeEmpty()->end()
+                        ->scalarNode('cache_pool')->defaultValue('cache.rate_limiter')->cannotBeEmpty()->end()
+                    ->end()
+                ->end()
             ->end()
         ;
 

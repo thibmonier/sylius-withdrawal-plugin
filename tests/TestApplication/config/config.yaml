@@ -1,6 +1,19 @@
 imports:
     - { resource: "@TmonierSyliusWithdrawalPlugin/config/config.yaml" }
 
+tmonier_sylius_withdrawal:
+    rate_limit:
+        per_ip: 4
+        per_email: 2
+        cache_pool: cache.tmonier_withdrawal_limiter
+
+framework:
+    cache:
+        pools:
+            # Filesystem (an array pool is reset between requests); cleared by every functional test.
+            cache.tmonier_withdrawal_limiter:
+                adapter: cache.adapter.filesystem
+
 twig:
     paths:
         '%kernel.project_dir%/../../../tests/TestApplication/templates': ~

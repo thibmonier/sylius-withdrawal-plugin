@@ -22,6 +22,10 @@ final class ShopWithdrawalTest extends WebTestCase
     {
         $this->client = self::createClient();
         $this->entityManager()->createQuery(sprintf('DELETE FROM %s', WithdrawalRequest::class))->execute();
+        // Rate limiter state of the previous tests.
+        $pool = self::getContainer()->get('cache.tmonier_withdrawal_limiter');
+        self::assertInstanceOf(\Psr\Cache\CacheItemPoolInterface::class, $pool);
+        $pool->clear();
     }
 
     public function testTheWithdrawalFunctionIsLinkedFromEveryShopPage(): void
@@ -130,6 +134,47 @@ final class ShopWithdrawalTest extends WebTestCase
         $this->client->request('GET', '/en_US/withdrawal/confirm');
 
         self::assertResponseRedirects('/en_US/withdrawal');
+    }
+
+    public function testConfirmationsAreLimitedPerEmailAndKeepTheStatement(): void
+    {
+        // The test application allows 2 confirmations per e-mail (case and "+tag" ignored).
+        foreach (['victim@example.com', 'Victim+1@example.com'] as $email) {
+            $this->confirmStatement($email);
+            self::assertResponseRedirects('/en_US/withdrawal/done');
+        }
+
+        $this->confirmStatement('victim+2@example.com');
+
+        self::assertResponseStatusCodeSame(429);
+        self::assertSelectorExists('[data-test-button="withdrawal-confirm"]');
+        self::assertSame(2, $this->countRequests());
+    }
+
+    public function testConfirmationsAreLimitedPerIp(): void
+    {
+        // The test application allows 4 confirmations per IP.
+        for ($attempt = 1; $attempt <= 4; ++$attempt) {
+            $this->confirmStatement(sprintf('consumer%d@example.com', $attempt));
+            self::assertResponseRedirects('/en_US/withdrawal/done');
+        }
+
+        $this->confirmStatement('consumer5@example.com');
+
+        self::assertResponseStatusCodeSame(429);
+        self::assertSame(4, $this->countRequests());
+    }
+
+    private function confirmStatement(string $email): void
+    {
+        $this->client->request('GET', '/en_US/withdrawal');
+        $this->client->submitForm('withdrawal-continue', [
+            'tmonier_withdrawal_statement[customerName]' => 'Jane Doe',
+            'tmonier_withdrawal_statement[email]' => $email,
+            'tmonier_withdrawal_statement[orderNumber]' => 'UNKNOWN-42',
+        ]);
+        $this->client->followRedirect();
+        $this->client->submitForm('withdrawal-confirm');
     }
 
     private function findPlacedOrder(): OrderInterface
