@@ -33,9 +33,14 @@ final class TmonierSyliusWithdrawalExtension extends AbstractResourceExtension i
     public function prepend(ContainerBuilder $container): void
     {
         // Grids are processed before this extension is loaded, so the model class parameter
-        // they reference has to exist at prepend time.
+        // they reference has to exist at prepend time. Only the nodes needed here are processed:
+        // the other values may still be unresolved env placeholders at this stage
+        // (e.g. notify_merchant: '%env(bool:...)%'), which boolean nodes reject.
         /** @var array{resources: array{withdrawal_request: array{classes: array{model: string}}}, rate_limit: array{enabled: bool, per_ip: int, per_email: int, interval: string, cache_pool: string}} $config */
-        $config = $this->processConfiguration(new Configuration(), $container->getExtensionConfig($this->getAlias()));
+        $config = $this->processConfiguration(new Configuration(), array_map(
+            static fn (array $config): array => array_intersect_key($config, ['resources' => true, 'rate_limit' => true]),
+            $container->getExtensionConfig($this->getAlias()),
+        ));
         $container->setParameter(
             'tmonier_withdrawal.model.withdrawal_request.class',
             $config['resources']['withdrawal_request']['classes']['model'],
