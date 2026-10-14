@@ -22,6 +22,10 @@ final class ShopWithdrawalTest extends WebTestCase
     {
         $this->client = self::createClient();
         $this->entityManager()->createQuery(sprintf('DELETE FROM %s', WithdrawalRequest::class))->execute();
+        // Rate limiter state of the previous tests.
+        $pool = self::getContainer()->get('cache.tmonier_withdrawal_limiter');
+        self::assertInstanceOf(\Psr\Cache\CacheItemPoolInterface::class, $pool);
+        $pool->clear();
     }
 
     public function testTheWithdrawalFunctionIsLinkedFromEveryShopPage(): void
@@ -130,6 +134,65 @@ final class ShopWithdrawalTest extends WebTestCase
         $this->client->request('GET', '/en_US/withdrawal/confirm');
 
         self::assertResponseRedirects('/en_US/withdrawal');
+    }
+
+    public function testConfirmationsAreLimitedPerEmailAndKeepTheStatement(): void
+    {
+        // The test application allows 2 confirmations per e-mail (case and "+tag" ignored).
+        foreach (['victim@example.com', 'Victim+1@example.com'] as $email) {
+            $this->confirmStatement($email);
+            self::assertResponseRedirects('/en_US/withdrawal/done');
+        }
+
+        $this->confirmStatement('victim+2@example.com');
+
+        self::assertResponseStatusCodeSame(429);
+        self::assertSelectorExists('[data-test-button="withdrawal-confirm"]');
+        self::assertSame(2, $this->countRequests());
+    }
+
+    public function testConfirmationsAreLimitedPerIp(): void
+    {
+        // The test application allows 4 confirmations per IP.
+        for ($attempt = 1; $attempt <= 4; ++$attempt) {
+            $this->confirmStatement(sprintf('consumer%d@example.com', $attempt));
+            self::assertResponseRedirects('/en_US/withdrawal/done');
+        }
+
+        $this->confirmStatement('consumer5@example.com');
+
+        self::assertResponseStatusCodeSame(429);
+        self::assertSame(4, $this->countRequests());
+    }
+
+    public function testASenderBlockedByIpDoesNotUseTheBudgetOfAnEmail(): void
+    {
+        for ($attempt = 1; $attempt <= 4; ++$attempt) {
+            $this->confirmStatement(sprintf('attacker%d@example.com', $attempt), '203.0.113.7');
+        }
+        // Refused for the IP: the e-mail budget of the victim is untouched.
+        for ($attempt = 1; $attempt <= 3; ++$attempt) {
+            $this->confirmStatement('victim@example.com', '203.0.113.7');
+            self::assertResponseStatusCodeSame(429);
+        }
+
+        foreach (['198.51.100.1', '198.51.100.2'] as $ip) {
+            $this->confirmStatement('victim@example.com', $ip);
+            self::assertResponseRedirects('/en_US/withdrawal/done');
+        }
+    }
+
+    private function confirmStatement(string $email, string $ip = '127.0.0.1'): void
+    {
+        $server = ['REMOTE_ADDR' => $ip];
+        $this->client->request('GET', '/en_US/withdrawal', [], [], $server);
+        $this->client->submitForm('withdrawal-continue', [
+            'tmonier_withdrawal_statement[customerName]' => 'Jane Doe',
+            'tmonier_withdrawal_statement[email]' => $email,
+            'tmonier_withdrawal_statement[orderNumber]' => 'UNKNOWN-42',
+        ], 'POST', $server);
+        $this->client->followRedirect();
+        $this->client->submitForm('withdrawal-confirm', [], 'POST', $server);
     }
 
     private function findPlacedOrder(): OrderInterface

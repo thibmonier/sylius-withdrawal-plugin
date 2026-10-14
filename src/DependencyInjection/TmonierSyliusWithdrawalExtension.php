@@ -10,6 +10,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 
 final class TmonierSyliusWithdrawalExtension extends AbstractResourceExtension implements PrependExtensionInterface
 {
@@ -32,13 +33,35 @@ final class TmonierSyliusWithdrawalExtension extends AbstractResourceExtension i
     public function prepend(ContainerBuilder $container): void
     {
         // Grids are processed before this extension is loaded, so the model class parameter
-        // they reference has to exist at prepend time.
-        /** @var array{resources: array{withdrawal_request: array{classes: array{model: string}}}} $config */
-        $config = $this->processConfiguration(new Configuration(), $container->getExtensionConfig($this->getAlias()));
+        // they reference has to exist at prepend time. Only the nodes needed here are processed:
+        // the other values may still be unresolved env placeholders at this stage
+        // (e.g. notify_merchant: '%env(bool:...)%'), which boolean nodes reject.
+        /** @var array{resources: array{withdrawal_request: array{classes: array{model: string}}}, rate_limit: array{enabled: bool, per_ip: int, per_email: int, interval: string, cache_pool: string}} $config */
+        $config = $this->processConfiguration(new Configuration(), array_map(
+            static fn (array $config): array => array_intersect_key($config, ['resources' => true, 'rate_limit' => true]),
+            $container->getExtensionConfig($this->getAlias()),
+        ));
         $container->setParameter(
             'tmonier_withdrawal.model.withdrawal_request.class',
             $config['resources']['withdrawal_request']['classes']['model'],
         );
+
+        if ($config['rate_limit']['enabled'] && class_exists(RateLimiterFactory::class)) {
+            $limiter = static fn (int $limit): array => [
+                'policy' => 'sliding_window',
+                'limit' => $limit,
+                'interval' => $config['rate_limit']['interval'],
+                'cache_pool' => $config['rate_limit']['cache_pool'],
+                // Without a lock, parallel requests read the same count and all get through.
+                'lock_factory' => 'lock.factory',
+            ];
+            // The default lock store (flock) unless the application configures the lock component.
+            $container->prependExtensionConfig('framework', ['lock' => ['enabled' => true, 'resources' => ['default' => ['flock']]]]);
+            $container->prependExtensionConfig('framework', ['rate_limiter' => [
+                'tmonier_withdrawal_ip' => $limiter($config['rate_limit']['per_ip']),
+                'tmonier_withdrawal_email' => $limiter($config['rate_limit']['per_email']),
+            ]]);
+        }
 
         $container->prependExtensionConfig('doctrine', [
             'orm' => [

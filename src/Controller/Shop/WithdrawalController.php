@@ -14,9 +14,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Tmonier\SyliusWithdrawalPlugin\Form\Type\WithdrawalStatementType;
 use Tmonier\SyliusWithdrawalPlugin\Model\WithdrawalStatement;
 use Tmonier\SyliusWithdrawalPlugin\Order\OrderMatcherInterface;
+use Tmonier\SyliusWithdrawalPlugin\RateLimit\RateLimitKeys;
 use Tmonier\SyliusWithdrawalPlugin\Repository\WithdrawalRequestRepositoryInterface;
 use Tmonier\SyliusWithdrawalPlugin\Submitter\WithdrawalRequestSubmitterInterface;
 
@@ -39,6 +41,8 @@ final class WithdrawalController extends AbstractController
         private readonly OrderMatcherInterface $orderMatcher,
         private readonly WithdrawalRequestSubmitterInterface $submitter,
         private readonly WithdrawalRequestRepositoryInterface $withdrawalRequestRepository,
+        private readonly ?RateLimiterFactory $ipLimiter = null,
+        private readonly ?RateLimiterFactory $emailLimiter = null,
     ) {
     }
 
@@ -88,6 +92,18 @@ final class WithdrawalController extends AbstractController
                 throw new BadRequestHttpException('Invalid CSRF token.');
             }
 
+            // The statement stays in the session: the consumer can confirm it later.
+            if ($this->isRateLimited($request, (string) $statement->email)) {
+                $this->addFlash('error', 'tmonier_withdrawal.flash.too_many_requests');
+
+                return $this->render('@TmonierSyliusWithdrawalPlugin/shop/withdrawal/confirm.html.twig', [
+                    'statement' => $statement,
+                    'order' => $order,
+                    'selected_items' => $this->getSelectedItemLabels($order, $statement),
+                    'csrf_token_id' => self::CSRF_TOKEN_ID,
+                ], new Response(null, Response::HTTP_TOO_MANY_REQUESTS));
+            }
+
             /** @var ChannelInterface $channel */
             $channel = $this->channelContext->getChannel();
             $withdrawalRequest = $this->submitter->submit(
@@ -122,6 +138,22 @@ final class WithdrawalController extends AbstractController
         return $this->render('@TmonierSyliusWithdrawalPlugin/shop/withdrawal/done.html.twig', [
             'withdrawal_request' => $withdrawalRequest,
         ]);
+    }
+
+    /**
+     * Consumes one token per limiter (IP or IPv6 /56, then the normalized e-mail). A request
+     * already refused for its IP does not use the e-mail budget: a blocked sender cannot keep
+     * the owner of an address from confirming a statement from elsewhere.
+     */
+    private function isRateLimited(Request $request, string $email): bool
+    {
+        if ($this->ipLimiter instanceof RateLimiterFactory &&
+            !$this->ipLimiter->create(RateLimitKeys::ip($request->getClientIp()))->consume()->isAccepted()) {
+            return true;
+        }
+
+        return $this->emailLimiter instanceof RateLimiterFactory && '' !== $email &&
+            !$this->emailLimiter->create(RateLimitKeys::email($email))->consume()->isAccepted();
     }
 
     private function getCustomer(): ?CustomerInterface

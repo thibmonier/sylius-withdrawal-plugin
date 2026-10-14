@@ -2,3 +2,5 @@ tmonier_withdrawal:
     withdrawal_request:
         accept: La rétractation a été acceptée.
         reject: La rétractation a été refusée.
+    flash:
+        too_many_requests: 'Trop de demandes : veuillez réessayer plus tard.'

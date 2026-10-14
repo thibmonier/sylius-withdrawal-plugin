@@ -96,7 +96,20 @@ Also included:
 tmonier_sylius_withdrawal:
     period_days: 14        # used to flag late statements; never used to refuse one
     notify_merchant: true  # copy of each statement to the channel contact e-mail
+    rate_limit:            # symfony/rate-limiter, on the "confirm withdrawal" step only
+        enabled: true
+        per_ip: 10         # confirmed statements per IP (IPv6 grouped by /56)
+        per_email: 3       # confirmed statements per e-mail (case and "+tag" ignored)
+        interval: '1 hour'
+        cache_pool: cache.rate_limiter
 ```
+
+Each confirmed statement records a request and sends e-mails to the address typed in the form,
+so the confirmation step is rate limited (sliding window, with a lock so parallel requests
+cannot get through together). The limits are deliberately high: the withdrawal function is a
+legal obligation, and a consumer who hits them keeps the statement and can confirm it later
+(HTTP 429 with a flash message). The form step itself is never limited. Set `enabled: false`
+if your infrastructure already throttles these routes.
 
 The withdrawal period starts when the goods are delivered (Art. 9). Sylius does not track
 delivery, so the plugin uses the last shipment date, falling back to the checkout completion

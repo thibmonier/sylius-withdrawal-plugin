@@ -74,6 +74,8 @@ return static function (ContainerConfigurator $container): void {
             service('tmonier_withdrawal.order.matcher'),
             service('tmonier_withdrawal.submitter'),
             service('tmonier_withdrawal.repository.withdrawal_request'),
+            service('limiter.tmonier_withdrawal_ip')->nullOnInvalid(),
+            service('limiter.tmonier_withdrawal_email')->nullOnInvalid(),
         ])
         ->call('setContainer', [service(\Psr\Container\ContainerInterface::class)])
         ->tag('controller.service_arguments')
